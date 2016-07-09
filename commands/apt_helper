@@ -1,0 +1,9 @@
+
+# APT Helper
+alias install='sudo apt-get install'
+alias uninstall='sudo apt-get remove'
+alias upgrade='apt_update && sudo apt-get upgrade'
+alias apt_update='sudo apt-get update'
+alias apt_purge='sudo apt-get purge'
+alias apt_autoremove='sudo apt-get autoremove'
+alias fix_dpkg='sudo dpkg --configure -a'
