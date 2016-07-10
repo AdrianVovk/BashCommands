@@ -1,1 +1,150 @@
+#!/bin/bash
+#==============================================================================
+# Copyright 2016 Adrian Vovk
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#==============================================================================
 
+# This tool allows you to download commands (be it .sh files or specially-made extentions to this file)
+# Feel free to contribute your own commands at https://github.com/AdrianVovk/BashCommands. I will approve them myself.
+
+#=========================================================================================================================
+
+# If this is the first run or things have not been configured yet, configure them
+mkdir ~/.commandsutil &> /dev/null
+mkdir ~/.commandsutil/plugins &> /dev/null
+if [ ! -f "$HOME/.commandsutil/installed_plugins" ]; then
+        touch ~/.commandsutil/installed_plugins
+
+        #Allowing to update commands tool
+        echo "rm $COMMANDS_TOOL_FILE" >> ~/.commandsutil/installed_plugins
+        echo "wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool" >> ~/.commandsutil/installed_plugins
+fi
+if [ ! -f "$HOME/.commandsutil/plugins_location" ]; then
+        touch ~/.commandsutil/plugins_location
+fi
+if [ ! -f "$HOME/.commandsutil/script_location" ]; then
+        echo "~/.bash_aliases" > ~/.commandsutil/script_location
+fi
+
+# Read configuration
+INSTALLED_SCRIPTS_LOCATION=~/.commandsutil/plugins_location
+COMMANDS_TOOL_FILE=$(cat ~/.commandsutil/script_location)
+source $INSTALLED_SCRIPTS_LOCATION
+cd ~
+
+#=====================================================================================================
+
+# Nano shortcut
+# Will remove appon request
+alias e='nano'
+
+# Bash
+alias edit_bashrc='nano ~/.bashrc'
+alias update_bash='source ~/.bashrc'
+
+# The main functions
+alias edit_commands='nano $INSTALLED_SCRIPTS_LOCATION && update_bash'
+alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
+
+#REMOVE ME PLS
+alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
+
+download_plugin() {
+        read -n1 -p "Are you sure you want to install $1? [y/n]:" call_safetey && echo
+        if [ "$call_safetey" = "y" ]; then
+                cd ~/.commandsutil/plugins
+                REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
+                if curl --output /dev/null --silent --head --fail "$REPO"
+                then
+                    echo "Command found in repo. Attempting to install"
+                    wget -O $1 $REPO &> /dev/null
+                else
+                    echo "Command not found in repo. Attempting to fetch manually"
+                    wget -O $1 $1 &> /dev/null
+                fi
+                chmod +x $1
+                update_bash
+                echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
+        else
+                echo Abort
+        fi
+}
+
+try_plugin() {
+        read -n1 -p "Are you sure you want to install $1? [y/n]:" call_safetey && echo
+        if [ "$call_safetey" = "y" ]; then
+        mkdir ~/.commandsutil/tmp &> /dev/null
+                cd ~/.commandsutil/tmp
+                REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
+                if curl --output /dev/null --silent --head --fail "$REPO"
+                then
+                    echo "Command found in repo. Attempting to run"
+                    wget -O script_exec $REPO &> /dev/null
+                else
+                    echo "Command not found in repo. Attempting to fetch manually"
+                    wget -O script_exec $1 &> /dev/null
+                fi
+                chmod +x script_exec
+                source script_exec
+                rm -rf ~/.commandsutil/tmp
+                echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
+                echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
+                cd ~
+        else
+                echo Abort
+        fi
+}
+
+uninstall_plugin() {
+        read -n1 -p "Are you sure you want to uninstall $1? [y/n]:" call_safetey && echo
+        if [ "$call_safetey" = "y" ]; then
+                echo Uninstalling
+                rm ~/.commandsutil/plugins/$1
+                sed -n '/'$1'/!p' ~/.commandsutil/installed_plugins >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed ~/.commandsutil/installed_plugins
+                rm ~/.commandsutil/tmp_installed
+        else
+                echo Abort
+        fi
+}
+
+make_command() {
+        echo "alias $1='$2'" >> $INSTALLED_SCRIPTS_LOCATION
+        update_bash
+}
+
+update_commands() {
+        source ~/.commandsutil/installed_plugins
+}
+
+# Configuration
+
+commands_tool_set_file_location() {
+        read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
+        if [ "$call_safetey" = "y" ]; then
+                echo "Setting location"
+                echo $1 > ~/.commandsutil/script_location
+        else
+                echo Abort
+        fi
+}
+
+commands_tool_reset() {
+        rm -rf ~/.commandsutil
+        update_bash
+}
+
+#======================================================================================================
+# Custom Commands Start Here
+# (Unless the save location is set to something else)
+#======================================================================================================
