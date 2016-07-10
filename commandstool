@@ -53,7 +53,7 @@ alias e='nano'
 
 # Bash
 alias edit_bashrc='nano ~/.bashrc && update_bash'
-alias update_bash='source ~/.bashrc'
+alias update_bash='exec bash'
 
 # The main functions
 alias edit_commands='nano $INSTALLED_SCRIPTS_LOCATION && update_bash'
