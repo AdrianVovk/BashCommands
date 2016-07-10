@@ -123,8 +123,9 @@ make_command() {
         update_bash
 }
 
-update_commands() {
+update_plugins() {
         source ~/.commandsutil/installed_plugins
+        update_bash
 }
 
 # Configuration
@@ -140,8 +141,14 @@ commands_tool_set_file_location() {
 }
 
 commands_tool_uninstall() {
-        rm $COMMANDS_TOOL_FILE
-        commands_tool_reset
+        read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
+        if [ "$call_safetey" = "y" ]; then
+                rm $COMMANDS_TOOL_FILE
+                rm -rf ~/.commandsutil
+                update_bash
+        else
+                echo Abort
+        fi
 }
 
 commands_tool_reset() {
