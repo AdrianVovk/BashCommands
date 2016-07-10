@@ -79,6 +79,8 @@ install_plugin() {
                     wget -O $1 $1 &> /dev/null
                 fi
                 chmod +x $1
+                echo "rm $HOME/.commandsutil/plugins/$1" >> ~/.commandsutil/installed_plugins
+                echo "wget -O $HOME/.commandsutil/plugins/$1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool" >> ~/.commandsutil/installed_plugins
                 echo "source $HOME/.commandsutil/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
@@ -117,6 +119,7 @@ uninstall_plugin() {
         if [ "$call_safetey" = "y" ]; then
                 echo Uninstalling
                 rm ~/.commandsutil/plugins/$1
+                $HOME/.commandsutil/plugins/$1
                 sed -n '/'$1'/!p' ~/.commandsutil/installed_plugins >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed ~/.commandsutil/installed_plugins
                 sed -n '/'$1'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed $INSTALLED_SCRIPTS_LOCATION
         else
