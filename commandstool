@@ -20,25 +20,27 @@
 
 #=========================================================================================================================
 
+# If this is the first run or things have not been configured yet, configure them
+mkdir ~/.commandsutil &> /dev/null
+mkdir ~/.commandsutil/plugins &> /dev/null
+if [ ! -f "$HOME/.commandsutil/plugins_location" ]; then
+        touch ~/.commandsutil/plugins_location
+fi
+if [ ! -f "$HOME/.commandsutil/script_location" ]; then
+        echo "$HOME/.bash_aliases" > ~/.commandsutil/script_location
+fi
+
 # Read configuration
 INSTALLED_SCRIPTS_LOCATION=~/.commandsutil/plugins_location
 COMMANDS_TOOL_FILE=$(cat ~/.commandsutil/script_location)
 
-# If this is the first run or things have not been configured yet, configure them
-mkdir ~/.commandsutil &> /dev/null
-mkdir ~/.commandsutil/plugins &> /dev/null
+# Make sure this tool will be updated along with all of the plugins
 if [ ! -f "$HOME/.commandsutil/installed_plugins" ]; then
         touch ~/.commandsutil/installed_plugins
 
         #Allowing to update commands tool
         echo "rm $COMMANDS_TOOL_FILE" >> ~/.commandsutil/installed_plugins
         echo "wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool" >> ~/.commandsutil/installed_plugins
-fi
-if [ ! -f "$HOME/.commandsutil/plugins_location" ]; then
-        touch ~/.commandsutil/plugins_location
-fi
-if [ ! -f "$HOME/.commandsutil/script_location" ]; then
-        echo "$HOME/.bash_aliases" > ~/.commandsutil/script_location
 fi
 
 cd ~
