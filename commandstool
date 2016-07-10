@@ -50,7 +50,7 @@ cd ~
 alias e='nano'
 
 # Bash
-alias edit_bashrc='nano ~/.bashrc'
+alias edit_bashrc='nano ~/.bashrc && update_bash'
 alias update_bash='source ~/.bashrc'
 
 # The main functions
