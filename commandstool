@@ -36,11 +36,7 @@ COMMANDS_TOOL_FILE=$(cat ~/.commandsutil/script_location)
 
 # Make sure this tool will be updated along with all of the plugins
 if [ ! -f "$HOME/.commandsutil/installed_plugins" ]; then
-        touch ~/.commandsutil/installed_plugins
-
-        #Allowing to update commands tool
-        echo "rm $COMMANDS_TOOL_FILE" >> ~/.commandsutil/installed_plugins
-        echo "wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool" >> ~/.commandsutil/installed_plugins
+        echo "update_commands_tool" > ~/.commandsutil/installed_plugins
 fi
 
 cd ~
@@ -74,24 +70,9 @@ install_plugin() {
                 read -n1 -p "$1 was not found in the repo. Install it? [y/n]:" call_safetey && echo
                 URL=$1
         fi
-        
         if [ "$call_safetey" = "y" ]; then
                 wget -O $1 $URL &> /dev/null
-        echo "rm $HOME/.commandsutil/plugins/$1" >> ~/.commandsutil/installed_plugins
-        fi
-          
-                cd ~/.commandsutil/plugins
-                
-                if curl --output /dev/null --silent --head --fail "$REPO"
-                then
-                    echo "Command found in repo. Attempting to install"
-                    echo "wget -O $HOME/.commandsutil/plugins/$1 $REPO" >> ~/.commandsutil/installed_plugins
-                    wget -O $1 $REPO &> /dev/null
-                else
-                    echo "Command not found in repo. Attempting to fetch manually"
-                    echo "wget -O $HOME/.commandsutil/plugins/$1 $1" >> ~/.commandsutil/installed_plugins
-                    wget -O $1 $1 &> /dev/null
-                fi
+                echo "rm $HOME/.commandsutil/plugins/$1" >> ~/.commandsutil/installed_plugins
                 chmod +rx $1
                 echo "source $HOME/.commandsutil/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
@@ -150,6 +131,11 @@ update_plugins() {
 }
 
 # Configuration
+
+update_commands_tool() {
+        rm $COMMANDS_TOOL_FILE" >> ~/.commandsutil/installed_plugins
+        wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool" >> ~/.commandsutil/installed_plugins
+}
 
 commands_tool_uninstall() {
         read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
