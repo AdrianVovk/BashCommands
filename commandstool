@@ -115,6 +115,7 @@ uninstall_plugin() {
                 echo Uninstalling
                 rm ~/.commandsutil/plugins/$1
                 sed -n '/'$1'/!p' ~/.commandsutil/installed_plugins >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed ~/.commandsutil/installed_plugins
+                sed -n '/'$1'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed $INSTALLED_SCRIPTS_LOCATION
         else
                 echo Abort
         fi
