@@ -66,11 +66,22 @@ alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
 #alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
 
 install_plugin() {
-        read -n1 -p "Are you sure you want to install $1? [y/n]:" call_safetey && echo
+        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
+        if curl --output /dev/null --silent --head --fail "$REPO"; then
+                read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
+                URL=$REPO
+        else 
+                read -n1 -p "$1 was not found in the repo. Install it? [y/n]:" call_safetey && echo
+                URL=$1
+        fi
+        
         if [ "$call_safetey" = "y" ]; then
+                wget -O $1 $URL &> /dev/null
+        echo "rm $HOME/.commandsutil/plugins/$1" >> ~/.commandsutil/installed_plugins
+        fi
+          
                 cd ~/.commandsutil/plugins
-                REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
-                echo "rm $HOME/.commandsutil/plugins/$1" >> ~/.commandsutil/installed_plugins
+                
                 if curl --output /dev/null --silent --head --fail "$REPO"
                 then
                     echo "Command found in repo. Attempting to install"
