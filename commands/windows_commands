@@ -1,0 +1,16 @@
+
+# Ports of some Windows commands
+# Created by Adrian Vovk
+alias dir='la'
+alias cls='clear'
+alias print='cat'
+alias del='rm'
+pause() {
+        # Using this for if statements
+        if [ -z "$1" ]; then
+                read -n1 -s -p "Press any key to continue..." key
+        else
+                read -n1 -s -p $1 key
+        fi
+        echo
+}
