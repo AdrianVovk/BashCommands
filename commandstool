@@ -59,8 +59,8 @@ alias update_bash='exec bash'
 alias edit_commands='nano $INSTALLED_SCRIPTS_LOCATION && update_bash'
 alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
 
-#REMOVE ME PLS
-alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
+# Enable this when developing on a PC not on GitHub
+#alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
 
 install_plugin() {
         read -n1 -p "Are you sure you want to install $1? [y/n]:" call_safetey && echo
