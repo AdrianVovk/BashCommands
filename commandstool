@@ -34,7 +34,7 @@ if [ ! -f "$HOME/.commandsutil/plugins_location" ]; then
         touch ~/.commandsutil/plugins_location
 fi
 if [ ! -f "$HOME/.commandsutil/script_location" ]; then
-        echo "~/.bash_aliases" > ~/.commandsutil/script_location
+        echo "$HOME/.bash_aliases" > ~/.commandsutil/script_location
 fi
 
 # Read configuration
