@@ -16,8 +16,9 @@ install_custom_location() {
         if [ "$call_safetey" = "y" ]; then
                 wget -O $1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool
                 chmod +x $1
+                mkdir ~/.commandsutil
+                echo $1 > ~/.commandsutil/script_location
                 source $1
-                commands_tool_set_file_location $1
                 echo "source $1" >> ~/.bashrc
                 update_bash
                 commands_tool_reset
