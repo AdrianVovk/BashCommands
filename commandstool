@@ -156,6 +156,10 @@ commands_tool_reset() {
         update_bash
 }
 
+commands_tool_test() {
+        echo "Commands Tool was successfully installed."
+}
+
 #======================================================================================================
 # Custom Commands Start Here
 # (Unless the save location is set to something else)
