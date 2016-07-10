@@ -76,9 +76,8 @@ install_plugin() {
                     wget -O $1 $1 &> /dev/null
                 fi
                 chmod +x $1
-                echo "source ~/.commandsutil/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
+                echo "source $HOME/.commandsutil/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
-                update_bash
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
         else
                 echo Abort
@@ -116,7 +115,6 @@ uninstall_plugin() {
                 echo Uninstalling
                 rm ~/.commandsutil/plugins/$1
                 sed -n '/'$1'/!p' ~/.commandsutil/installed_plugins >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed ~/.commandsutil/installed_plugins
-                rm ~/.commandsutil/tmp_installed
         else
                 echo Abort
         fi
