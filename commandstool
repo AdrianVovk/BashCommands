@@ -139,6 +139,11 @@ commands_tool_set_file_location() {
         fi
 }
 
+commands_tool_uninstall() {
+        rm $COMMANDS_TOOL_FILE
+        commands_tool_reset
+}
+
 commands_tool_reset() {
         rm -rf ~/.commandsutil
         update_bash
