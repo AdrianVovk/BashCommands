@@ -27,3 +27,10 @@ install_custom_location() {
                 echo Abort Installation
         fi
 }
+
+update_installer() {
+        rm ct_installer
+        wget https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_installer
+        chmod +rwx ct_installer
+        source ct_installer
+}
