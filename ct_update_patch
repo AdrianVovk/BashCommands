@@ -25,8 +25,7 @@ patch_manual() {
 }
 
 patch_code_fix() {
-      #echo "Oops, the developer did a stupid"
-      mv ~/.commandsutil ~/.commandstool
+      echo "Oops, the developer did a stupid"
 }
 
 patch_print_changelog() {
@@ -34,6 +33,7 @@ patch_print_changelog() {
       echo "Changes:"
       echo "- Added Changelog function"
       echo "- Fixed errors when patch is applied"
+      echo
 }
 
 echo "Checking if these versions are compatible"
