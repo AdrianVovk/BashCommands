@@ -31,8 +31,7 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- try_plugin: Improve output flow"
-      echo "- "
+      echo "- Now outputs some sort of header when installing certain plugins"
       echo
 }
 
