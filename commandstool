@@ -87,7 +87,7 @@ install_plugin() {
 }
 
 shorten_url() {
-        URL_TEMP=$1:7
+        URL_TEMP="$1":7
         echo ${URL_TEMP##/*/}
 }
 
