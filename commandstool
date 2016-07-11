@@ -42,6 +42,11 @@ UPDATE_SCRIPT=~/.commandstool/update_script
 # This goes through and loads in all of the new scripts
 source $INSTALLED_SCRIPTS_LOCATION
 
+# Add commands that should not be called automatically
+if [ -d ~/.commandstool/plugins_alt ]; then
+    PATH="$HOME/commandstool/plugins_alt:$PATH"    
+fi
+
 #=====================================================================================================
 
 # Nano shortcut
@@ -71,13 +76,19 @@ install_plugin() {
                 URL=$1
         fi
         if [ "$call_safetey" = "y" ]; then
+                if [ ! "$2" = "--no_auto_exec" ]: then
+                        FILEPATH=~/.commandstool/plugins
+                        echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
+                else        
+                        FILEPATH=~/.commandstool/plugins_alt
+                        mkdir $FILEPATH &> /dev/null
+                fi
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
                 echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
                 echo "rm $HOME/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
                 echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> $UPDATE_SCRIPT
                 echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
                 chmod +rx ~/.commandstool/plugins/$FILENAME
-                echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
                 
                 # Try to run the plugin's splash if it has one
@@ -162,7 +173,7 @@ update_commands_tool_custom_patch() {
         # Replace the file
         rm $COMMANDS_TOOL_FILE &> /dev/null
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
-        chmod +rx $COMMAND_TOOL_FILE
+        chmod +rx $COMMANDs_TOOL_FILE
         
         #Code for patches
         source $1
