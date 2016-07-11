@@ -63,16 +63,14 @@ alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
 
 install_plugin() {
         REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
-        if curl --output /dev/null --silent --head --fail "$REPO"
-        then
+        if curl --output /dev/null --silent --head --fail "$REPO"; then
                 read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
                 URL=$REPO
                 FILENAME=$1
         else 
                 read -n1 -p "$1 was not found in the repo. Install it? [y/n]:" call_safetey && echo
                 URL=$1
-                URL_TEMP=${1##*/}
-                FILENAME=${URL_TEMP##?*}
+                FILENAME=${1##*/}
         fi
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
@@ -115,8 +113,7 @@ uninstall_plugin() {
         then
                 FILENAME=$1
         else 
-                URL_TEMP=${1##*/}
-                FILENAME=${URL_TEMP##?*}
+                FILENAME=${1##*/}
         fi
         read -n1 -p "Are you sure you want to uninstall $1? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
