@@ -173,7 +173,7 @@ update_commands_tool_custom_patch() {
         # Replace the file
         rm $COMMANDS_TOOL_FILE &> /dev/null
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
-        chmod +rx $COMMANDs_TOOL_FILE
+        chmod +rx $COMMANDS_TOOL_FILE
         
         #Code for patches
         source $1
