@@ -84,10 +84,11 @@ try_plugin() {
         REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
         if curl --output /dev/null --silent --head --fail "$REPO"
         then
-                read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
+                read -n1 -p "$1 was found in the repo. Try it? [y/n]:" call_safetey && echo        
                 URL=$REPO
         else 
-                read -n1 -p "$1 was not found in the repo. Install it? [y/n]:" call_safetey && echo
+                FILENAME=${1##*/}
+                read -n1 -p "$FILENAME is from an external source. Try it? [y/n]:" call_safetey && echo
                 URL=$1
         fi
         if [ "$call_safetey" = "y" ]; then
