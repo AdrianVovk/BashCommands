@@ -25,10 +25,11 @@ patch_manual() {
 }
 
 patch_code_fix() {
-      echo "Oops, the developer did a stupid"
+      #echo "Oops, the developer did a stupid"
+      mv ~/.commandsutil ~/.commandstool
 }
 
-echo Checking if these versions are compatible
-patch_all_good
-#patch_fixing
+echo "Checking if these versions are compatible"
+#patch_all_good
+patch_fixing
 #patch_code_fix
