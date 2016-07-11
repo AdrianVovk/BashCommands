@@ -126,6 +126,7 @@ make_command() {
 }
 
 update_plugins() {
+        update_commands_tool
         source ~/.commandsutil/installed_plugins
         update_bash
 }
@@ -137,7 +138,7 @@ update_commands_tool() {
         echo "Patching current install"
         mkdir ~/.commandsutil/tmp/ &> /dev/null
         wget -O ~/.commandsutil/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
-        update_commands_tool_cusom_patch ~/.commandsutil/tmp/patch
+        update_commands_tool_custom_patch ~/.commandsutil/tmp/patch
         rm -rf ~/.commandsutil/tmp/ &> /dev/null
 }
 
