@@ -31,7 +31,7 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "Fixed many problems"
+      echo "Fixed plugin install problems"
       echo
 }
 
