@@ -1,0 +1,32 @@
+#!/bin/bash
+patch_all_good() {
+      echo "These versions are fully intercompatible. Continuing..."
+}
+
+patch_fixing() {
+      echo "It seems that the newer version of Commands Tool works slightly differently."
+      echo "Fixing all of the issues with the current configuration"
+      patch_code_fix
+}
+
+patch_manual() {
+      MANUALURL="www.google.com"
+      
+      echo "Uh-oh, it looks like these versions are not intercompatible at all."
+      echo "You will have to manually
+      read -n1 -s -p "Press any key to dowload instructions..." key && echo
+      mkdir ~/.commandsutil/tmp/ &> /dev/null
+      wget -O ~/.commandsutil/tmp/patch_instruction $MANUALURL &> /dev/null 
+      nano ~/.commandsutil/tmp/patch_instruction
+      read -n1 -s -p "Press any key when done..." key && echo
+      rm -rf ~/.commandsutil/tmp/
+}
+
+patch_code_fix() {
+      
+}
+
+echo Checking if these versions are compatible
+patch_all_good
+#patch_fixing
+#patch_code_fix
