@@ -26,10 +26,10 @@ patch_manual() {
 
 patch_code_fix() {
       #echo "Oops, the developer did a stupid"
-      echo "Moving Files"
-      mv ~/.commandstool/installed_plugins ~/.commandstool/update_script
-      mv ~/.commandstool/plugins_location ~/.commandstool/runner
-      mv ~/.commandstool/script_location ~/.commandstool/config/script_location
+      mv ~/.commandstool/installed_plugins ~/.commandstool/update_script &> /dev/null
+      mv ~/.commandstool/plugins_location ~/.commandstool/runner &> /dev/null
+      mkdir ~/.commandstool/config &> /dev/null
+      mv ~/.commandstool/script_location ~/.commandstool/config/script_location &> /dev/null
 }
 
 patch_print_changelog() {
