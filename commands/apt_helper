@@ -1,4 +1,19 @@
 
+apt_helper() {
+    echo "APT Helper plugin"
+    echo "Created by Adrian Vovk"
+    echo
+    echo "Commands added to your system:"
+    echo "install: Takes a package name and installs it"
+    echo "uninstall: Takes a package name and uninstalls it"
+    echo "upgrade: upgrades all packages or provided package name"
+    echo "apt_update: Calls 'sudo apt-get update'"
+    echo "apt_purge: Calls 'sudo apt-get purge'"
+    echo "apt_autoremove: Calls 'sudo apt-get autoremove'"
+    echo "fix_dpkg: Fixes some APT problems (Calls 'sudo dpkg --configure -a')"
+    echo "apt_add_repo: Takes a repo name (ppa:foo-bar) and adds it to APT"
+}
+
 # APT Helper
 alias install='sudo apt-get install'
 alias uninstall='sudo apt-get remove'
@@ -7,3 +22,4 @@ alias apt_update='sudo apt-get update'
 alias apt_purge='sudo apt-get purge'
 alias apt_autoremove='sudo apt-get autoremove'
 alias fix_dpkg='sudo dpkg --configure -a'
+alias apt_add_repo='sudo add-apt-repository $1 && apt_update'
