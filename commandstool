@@ -71,6 +71,8 @@ install_plugin() {
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
                 echo "rm $HOME/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
+                echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> ~/.commandstool/installed_plugins
+                echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
                 chmod +rx ~/.commandstool/plugins/$FILENAME
                 echo "source $HOME/.commandstool/plugins/$FILENAME" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
@@ -122,8 +124,8 @@ uninstall_plugin() {
         read -n1 -p "Are you sure you want to uninstall $FILENAME? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
                 rm ~/.commandstool/plugins/$FILENAME
-                sed -n '/'$FILENAME'/!p' ~/.commandstool/installed_plugins >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed ~/.commandstool/installed_plugins
-                sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed $INSTALLED_SCRIPTS_LOCATION
+                sed -n '/'$FILENAME'/!p' ~/.commandstool/installed_plugins >> ~/.commandstool/tmp_installed_p && mv ~/.commandstool/tmp_installed_p ~/.commandstool/installed_plugins
+                sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed_s && mv ~/.commandstool/tmp_installed_s $INSTALLED_SCRIPTS_LOCATION
         else
                 echo Abort
         fi
@@ -135,7 +137,9 @@ make_command() {
 }
 
 update_plugins() {
-        update_commands_tool
+        if [ ! "$1" = "--no_ct_update" ]; then
+                update_commands_tool
+        fi
         source ~/.commandstool/installed_plugins
         update_bash
 }
