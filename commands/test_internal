@@ -1,0 +1,8 @@
+#!/bin/bash
+echo "This is the in-repo test command"
+echo "Internal run (or try) test: PASS"
+
+test_external() {
+    echo "This was installed."
+    echo "Internal install test: PASS"
+}
