@@ -32,7 +32,7 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- None"
+      echo "- Testing changelog"
       echo
 }
 
