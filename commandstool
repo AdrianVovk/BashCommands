@@ -79,7 +79,7 @@ install_plugin() {
                 if [ ! "$2" = "--no_auto_exec" ]: then
                         FILEPATH=~/.commandstool/plugins
                         echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
-                else        
+                else
                         FILEPATH=~/.commandstool/plugins_alt
                         mkdir $FILEPATH &> /dev/null
                 fi
