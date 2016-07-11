@@ -2,7 +2,7 @@
 echo "This is the in-repo test command"
 echo "Internal run (or try) test: PASS"
 
-test_external() {
+test_internal() {
     echo "This was installed."
     echo "Internal install test: PASS"
 }
