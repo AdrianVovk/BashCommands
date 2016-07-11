@@ -86,6 +86,11 @@ install_plugin() {
         fi
 }
 
+shorten_url() {
+        URL_TEMP=$1:7
+        echo ${URL_TEMP##/*/}
+}
+
 try_plugin() {
         REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
         if curl --output /dev/null --silent --head --fail "$REPO"
