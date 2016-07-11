@@ -19,6 +19,6 @@ test_ct() {
     uninstall_plugin test_internal
     echo "In-repo function test complete."
     echo "Testing complete. Feel free to run uninstall_tests now."
-    echo "Or you can run more_test_ct to run other tests. These could be destructive so they will prompt you if you are sure you want to do each one.
+    echo "Or you can run more_test_ct to run other tests. These could be destructive so they will prompt you if you are sure you want to do each one."
     echo "Exit"
 }
