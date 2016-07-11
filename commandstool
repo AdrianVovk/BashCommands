@@ -137,8 +137,14 @@ update_commands_tool() {
         echo "Patching current install"
         mkdir ~/.commandsutil/tmp/ &> /dev/null
         wget -O ~/.commandsutil/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
-        source ~/.commandsutil/tmp/patch
+        update_commands_tooll_cusom_patch ~/.commandsutil/tmp/patch
         rm -rf ~/.commandsutil/tmp/ &> /dev/null
+}
+
+update_commands_tool_custom_patch() {
+        #Code for patches
+        echo "Patching current install"
+        source $1
         
         # Actually replace the file
         echo "Downloading new version"
@@ -146,7 +152,7 @@ update_commands_tool() {
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
         
         # Notify the system of the change
-        update_bash
+        update_bash    
 }
 
 commands_tool_uninstall() {
