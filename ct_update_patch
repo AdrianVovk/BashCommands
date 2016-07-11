@@ -26,6 +26,7 @@ patch_manual() {
 
 patch_code_fix() {
       #echo "Oops, the developer did a stupid"
+      echo "Moving Files"
       mv ~/.commandstool/installed_plugins ~/.commandstool/update_script
       mv ~/.commandstool/plugins_location ~/.commandstool/runner
       mv ~/.commandstool/script_location ~/.commandstool/config/script_location
