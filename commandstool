@@ -86,11 +86,9 @@ install_plugin() {
         fi
         if [ "$call_safetey" = "y" ]; then
                 if [ ! "$2" = "--no_auto_exec" ]; then
-                        FILEPATH=~/.commandstool/plugins
                         echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
                 else
-                        mkdir ~/.commandstool/plugins_alt &> /dev/null
-                        FILEPATH=~/.commandstool/plugins_alt
+                        echo "alias $FILENAME:'source $FILENAME'" >> $INSTALLED_SCRIPTS_LOCATION
                 fi
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
                 echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
