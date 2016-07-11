@@ -84,7 +84,7 @@ install_plugin() {
                 if [ ! "$2" = "--no_auto_exec" ]; then
                         echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
                 else
-                        echo "alias $FILENAME:'source $FILENAME'" >> $INSTALLED_SCRIPTS_LOCATION
+                        echo "alias $FILENAME='source $FILENAME'" >> $INSTALLED_SCRIPTS_LOCATION
                 fi
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
                 echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
