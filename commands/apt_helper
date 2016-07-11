@@ -2,8 +2,13 @@
 apt_helper() {
     echo "APT Helper plugin"
     echo "Created by Adrian Vovk"
+    apt_helper_commands
+    echo "Type 'apt_helper_commands' into your terminal to see this message again"
+}
+
+apt_helper_commands() {
     echo
-    echo "Commands added to your system:"
+    echo "APT Helper Commands:"
     echo "install: Takes a package name and installs it"
     echo "uninstall: Takes a package name and uninstalls it"
     echo "upgrade: upgrades all packages or provided package name"
@@ -13,7 +18,6 @@ apt_helper() {
     echo "fix_dpkg: Fixes some APT problems (Calls 'sudo dpkg --configure -a')"
     echo "apt_add_repo: Takes a repo name (ppa:foo-bar) and adds it to APT"
     echo
-    echo "Type 'apt_helper' into your terminal to see this message again"
 }
 
 # APT Helper
