@@ -23,7 +23,7 @@ patch_manual() {
 }
 
 patch_code_fix() {
-      
+      echo "Oops, the developer did a stupid"
 }
 
 echo Checking if these versions are compatible
