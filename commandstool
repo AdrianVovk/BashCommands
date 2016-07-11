@@ -21,22 +21,22 @@
 #=========================================================================================================================
 
 # If this is the first run or things have not been configured yet, configure them
-mkdir ~/.commandsutil &> /dev/null
-mkdir ~/.commandsutil/plugins &> /dev/null
-if [ ! -f "$HOME/.commandsutil/plugins_location" ]; then
-        touch ~/.commandsutil/plugins_location
+mkdir ~/.commandstool &> /dev/null
+mkdir ~/.commandstool/plugins &> /dev/null
+if [ ! -f "$HOME/.commandstool/plugins_location" ]; then
+        touch ~/.commandstool/plugins_location
 fi
-if [ ! -f "$HOME/.commandsutil/script_location" ]; then
-        echo "$HOME/.bash_aliases" > ~/.commandsutil/script_location
+if [ ! -f "$HOME/.commandstool/script_location" ]; then
+        echo "$HOME/.bash_aliases" > ~/.commandstool/script_location
 fi
 
 # Read configuration
-INSTALLED_SCRIPTS_LOCATION=~/.commandsutil/plugins_location
-COMMANDS_TOOL_FILE=$(cat ~/.commandsutil/script_location)
+INSTALLED_SCRIPTS_LOCATION=~/.commandstool/plugins_location
+COMMANDS_TOOL_FILE=$(cat ~/.commandstool/script_location)
 
 # Make sure this tool will be updated along with all of the plugins
-if [ ! -f "$HOME/.commandsutil/installed_plugins" ]; then
-        echo "update_commands_tool" > ~/.commandsutil/installed_plugins
+if [ ! -f "$HOME/.commandstool/installed_plugins" ]; then
+        echo "update_commands_tool" > ~/.commandstool/installed_plugins
 fi
 
 cd ~
@@ -72,9 +72,9 @@ install_plugin() {
         fi
         if [ "$call_safetey" = "y" ]; then
                 wget -O $1 $URL &> /dev/null
-                echo "rm $HOME/.commandsutil/plugins/$1" >> ~/.commandsutil/installed_plugins
+                echo "rm $HOME/.commandstool/plugins/$1" >> ~/.commandstool/installed_plugins
                 chmod +rx $1
-                echo "source $HOME/.commandsutil/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
+                echo "source $HOME/.commandstool/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
         else
@@ -85,8 +85,8 @@ install_plugin() {
 try_plugin() {
         read -n1 -p "Are you sure you want to install $1? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
-        mkdir ~/.commandsutil/tmp &> /dev/null
-                cd ~/.commandsutil/tmp
+        mkdir ~/.commandstool/tmp &> /dev/null
+                cd ~/.commandstool/tmp
                 REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
                 if curl --output /dev/null --silent --head --fail "$REPO"
                 then
@@ -98,7 +98,7 @@ try_plugin() {
                 fi
                 chmod +x script_exec
                 source script_exec
-                rm -rf ~/.commandsutil/tmp
+                rm -rf ~/.commandstool/tmp
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
                 echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
                 cd ~
@@ -111,10 +111,10 @@ uninstall_plugin() {
         read -n1 -p "Are you sure you want to uninstall $1? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
                 echo Uninstalling
-                rm ~/.commandsutil/plugins/$1
-                $HOME/.commandsutil/plugins/$1
-                sed -n '/'$1'/!p' ~/.commandsutil/installed_plugins >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed ~/.commandsutil/installed_plugins
-                sed -n '/'$1'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandsutil/tmp_installed && mv ~/.commandsutil/tmp_installed $INSTALLED_SCRIPTS_LOCATION
+                rm ~/.commandstool/plugins/$1
+                $HOME/.commandstool/plugins/$1
+                sed -n '/'$1'/!p' ~/.commandstool/installed_plugins >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed ~/.commandstool/installed_plugins
+                sed -n '/'$1'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed $INSTALLED_SCRIPTS_LOCATION
         else
                 echo Abort
         fi
@@ -127,17 +127,17 @@ make_command() {
 
 update_plugins() {
         update_commands_tool
-        source ~/.commandsutil/installed_plugins
+        source ~/.commandstool/installed_plugins
         update_bash
 }
 
 # Configuration
 
 update_commands_tool() {
-        mkdir ~/.commandsutil/tmp/ &> /dev/null
-        wget -O ~/.commandsutil/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
-        update_commands_tool_custom_patch ~/.commandsutil/tmp/patch
-        rm -rf ~/.commandsutil/tmp/ &> /dev/null
+        mkdir ~/.commandstool/tmp/ &> /dev/null
+        wget -O ~/.commandstool/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
+        update_commands_tool_custom_patch ~/.commandstool/tmp/patch
+        rm -rf ~/.commandstool/tmp/ &> /dev/null
 }
 
 update_commands_tool_custom_patch() {
@@ -147,7 +147,7 @@ update_commands_tool_custom_patch() {
         
         # Actually replace the file
         echo "Downloading new version"
-        rm $COMMANDS_TOOL_FILE >> ~/.commandsutil/installed_plugins &> /dev/null
+        rm $COMMANDS_TOOL_FILE >> ~/.commandstool/installed_plugins &> /dev/null
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
         
         # Notify the system of the change
@@ -158,7 +158,7 @@ commands_tool_uninstall() {
         read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
                 rm $COMMANDS_TOOL_FILE
-                rm -rf ~/.commandsutil
+                rm -rf ~/.commandstool
                 update_bash
         else
                 echo Abort
@@ -166,9 +166,9 @@ commands_tool_uninstall() {
 }
 
 commands_tool_reset() {
-        rm -rf ~/.commandsutil
+        rm -rf ~/.commandstool
         if [ ! -z "$1" ]; then
-                echo $1 > ~/.commandsutil/script_location
+                echo $1 > ~/.commandstool/script_location
         fi
         update_bash
 }
