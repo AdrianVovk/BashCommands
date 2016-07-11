@@ -26,18 +26,13 @@ patch_manual() {
 
 patch_code_fix() {
       #echo "Oops, the developer did a stupid"
-      mv ~/.commandstool/installed_plugins ~/.commandstool/update_script &> /dev/null
-      mv ~/.commandstool/plugins_location ~/.commandstool/runner &> /dev/null
-      mkdir ~/.commandstool/config &> /dev/null
-      mv ~/.commandstool/script_location ~/.commandstool/config/script_location &> /dev/null
+      mv ~/.commandstool/plugins_alt ~/.commandstool/plugins &> /dev/null
 }
 
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- Fix chmod error during upgrade process"
-      echo "- Allow to add --no_auto_exec to install_plugin to make sure it will not execute the command each time you log into bash. You will have to call"
-      echo "the command manually if you want to execute it."
+      echo "- The --no_auto_exec option now works with uninstall and such"
       echo
 }
 
