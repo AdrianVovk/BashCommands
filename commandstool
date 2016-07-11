@@ -138,6 +138,7 @@ update_commands_tool() {
         wget -O ~/.commandstool/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
         update_commands_tool_custom_patch ~/.commandstool/tmp/patch
         rm -rf ~/.commandstool/tmp/ &> /dev/null
+        update_bash
 }
 
 update_commands_tool_custom_patch() {
@@ -149,8 +150,7 @@ update_commands_tool_custom_patch() {
         #Code for patches
         source $1
         
-        # Notify the system of the change
-        update_bash
+        # Manually notify bash
 }
 
 commands_tool_uninstall() {
