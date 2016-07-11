@@ -63,7 +63,8 @@ alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
 
 install_plugin() {
         REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
-        if curl --output /dev/null --silent --head --fail "$REPO"; then
+        if curl --output /dev/null --silent --head --fail "$REPO"
+        then
                 read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
                 URL=$REPO
                 FILENAME=$1
@@ -87,7 +88,8 @@ install_plugin() {
 
 try_plugin() {
         REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
-        if curl --output /dev/null --silent --head --fail "$REPO"; then
+        if curl --output /dev/null --silent --head --fail "$REPO"
+        then
                 read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
                 URL=$REPO
         else 
@@ -109,7 +111,8 @@ try_plugin() {
 
 uninstall_plugin() {
         REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
-        if curl --output /dev/null --silent --head --fail "$REPO"; then
+        if curl --output /dev/null --silent --head --fail "$REPO"
+        then
                 FILENAME=$1
         else 
                 URL_TEMP=$1:7
