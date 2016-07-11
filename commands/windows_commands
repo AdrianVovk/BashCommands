@@ -1,6 +1,24 @@
+#!/bin/bash
+windows_commands() {
+        echo "Windows Commands plugin"
+        echo "By Adrian Vovk"
+        echo
+        windows_commands_help
+        echo
+        echo "To see this help message again, run 'windows_commands_help'"
+}
 
-# Ports of some Windows commands
-# Created by Adrian Vovk
+windows_commands_help() {
+        echo "Windows Commands: Installed commands"
+        echo "All of these commands do what they would on windows."
+        echo "dir"
+        echo "cls"
+        echo "print"
+        echo "del"
+        echo "pause"
+        echo "echo."
+}
+
 alias dir='la'
 alias cls='clear'
 alias print='cat'
@@ -14,3 +32,4 @@ pause() {
         fi
         echo
 }
+alias echo.='echo'
