@@ -137,6 +137,7 @@ update_commands_tool() {
         echo "Patching current install"
         mkdir ~/.commandsutil/tmp/ &> /dev/null
         wget -O ~/.commandsutil/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
+        source ~/.commandsutil/tmp/patch
         rm -rf ~/.commandsutil/tmp/ &> /dev/null
         
         # Actually replace the file
