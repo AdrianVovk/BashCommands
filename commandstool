@@ -109,7 +109,7 @@ uninstall_plugin() {
                 FILENAME=$1
         else 
                 FILENAME=${1##*/}
-                if [ ! -f ~.commandstool/plugins/$FILENAME]; then
+                if [ ! -f ~.commandstool/plugins/$FILENAME ]; then
                         echo "Plugin not found. Abort"
                         return
                 fi
