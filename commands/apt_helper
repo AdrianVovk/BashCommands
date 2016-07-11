@@ -1,4 +1,4 @@
-
+#!/bin/bash
 apt_helper() {
     echo "APT Helper plugin"
     echo "Created by Adrian Vovk"
