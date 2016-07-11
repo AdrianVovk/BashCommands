@@ -147,11 +147,10 @@ update_commands_tool_custom_patch() {
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
         
         #Code for patches
-        echo "Making sure data is transferred"
         source $1
         
         # Notify the system of the change
-        update_bash    
+        update_bash
 }
 
 commands_tool_uninstall() {
