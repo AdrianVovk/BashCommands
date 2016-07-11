@@ -58,7 +58,7 @@ alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
 #alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
 
 install_plugin() {
-        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
+        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
         if curl --output /dev/null --silent --head --fail "$REPO"; then
                 read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
                 URL=$REPO
@@ -81,7 +81,7 @@ install_plugin() {
 }
 
 try_plugin() {
-        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
+        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
         if curl --output /dev/null --silent --head --fail "$REPO"
         then
                 read -n1 -p "$1 was found in the repo. Try it? [y/n]:" call_safetey && echo        
@@ -93,7 +93,7 @@ try_plugin() {
         fi
         if [ "$call_safetey" = "y" ]; then
                 mkdir ~/.commandstool/tmp &> /dev/null
-                wget -O ~/.commandstool/tmp/script_exec $REPO &> /dev/null
+                wget -O ~/.commandstool/tmp/script_exec $URL &> /dev/null
                 chmod +x ~/.commandstool/tmp/script_exec
                 source ~/.commandstool/tmp/script_exec
                 rm -rf ~/.commandstool/tmp
