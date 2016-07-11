@@ -74,7 +74,9 @@ install_plugin() {
                 chmod +rx ~/.commandstool/plugins/$FILENAME
                 echo "source $HOME/.commandstool/plugins/$FILENAME" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
-                echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
+                
+                # Try to run the plugin's splash if it has one
+                $FILENAME > /dev/null
         else
                 echo Abort
         fi
