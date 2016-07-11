@@ -31,12 +31,12 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- Now outputs some sort of header when installing certain plugins"
+      echo "- update_plugins is fixed"
       echo
 }
 
 echo "Checking if these versions are compatible"
-patch_all_good
-#patch_fixing
+#patch_all_good
+patch_fixing
 #patch_code_fix
 patch_print_changelog
