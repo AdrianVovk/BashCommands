@@ -1,0 +1,36 @@
+#!/bin/bash
+
+up_back() {
+  echo "Up Command"
+  echo "Adapted for Commands Tool by Adrian Vovk"
+  echo "Created by foxdonut on Stack Overflow"
+  echo "Found on http://stackoverflow.com/posts/245724/revisions"
+}
+
+function up() {
+  LIMIT=$1
+  if [[ ! $1 ]]; then
+      LIMIT=1
+  fi
+  P=$PWD
+  for ((i=1; i <= LIMIT; i++))
+  do
+      P=$P/..
+  done
+  cd $P
+  export MPWD=$P
+}
+
+function back() {
+  LIMIT=$1
+  if [[ ! $1 ]]; then
+      LIMIT=1
+  fi
+  P=$MPWD
+  for ((i=1; i <= LIMIT; i++))
+  do
+      P=${P%/..}
+  done
+  cd $P
+  export MPWD=$P
+}
