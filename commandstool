@@ -23,7 +23,6 @@
 # If this is the first run or things have not been configured yet, configure them
 mkdir ~/.commandstool &> /dev/null
 mkdir ~/.commandstool/plugins &> /dev/null
-mkdir ~/.commandstool/plugins_alt &> /dev/null
 mkdir ~/.commandstool/config &> /dev/null
 if [ ! -f "$HOME/.commandstool/runner" ]; then
         touch ~/.commandstool/runner
@@ -48,7 +47,7 @@ if [ -d ~/.commandstool/plugins_alt ]; then
     PATH="$HOME/commandstool/plugins_alt:$PATH"    
 fi
 
-if [ ! -d ~/.commandstool/config/didrun ]
+if [ ! -d ~/.commandstool/config/didrun ]; then
         echo "Yes" > ~/.commandstool/config/didrun
         echo "======================================================================"
         echo "COMMANDS TOOL"
@@ -86,10 +85,12 @@ install_plugin() {
                 URL=$1
         fi
         if [ "$call_safetey" = "y" ]; then
-                FILEPATH=~/.commandstool/plugins_alt
-                if [ ! "$2" = "--no_auto_exec" ]: then
+                if [ ! "$2" = "--no_auto_exec" ]; then
                         FILEPATH=~/.commandstool/plugins
                         echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
+                else
+                        mkdir ~/.commandstool/plugins_alt &> /dev/null
+                        FILEPATH=~/.commandstool/plugins_alt
                 fi
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
                 echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
