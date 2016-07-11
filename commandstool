@@ -134,8 +134,6 @@ update_plugins() {
 # Configuration
 
 update_commands_tool() {
-        #Code for patches
-        echo "Patching current install"
         mkdir ~/.commandsutil/tmp/ &> /dev/null
         wget -O ~/.commandsutil/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
         update_commands_tool_custom_patch ~/.commandsutil/tmp/patch
