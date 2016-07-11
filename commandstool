@@ -47,7 +47,7 @@ if [ -d ~/.commandstool/plugins_alt ]; then
     PATH="$HOME/commandstool/plugins_alt:$PATH"    
 fi
 
-if [ ! -d ~/.commandstool/config/didrun ]; then
+if [ ! -f ~/.commandstool/config/didrun ]; then
         echo "Yes" > ~/.commandstool/config/didrun
         echo "======================================================================"
         echo "COMMANDS TOOL"
