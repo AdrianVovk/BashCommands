@@ -36,6 +36,8 @@ patch_print_changelog() {
       echo
       echo "Changes:"
       echo "- Fix chmod error during upgrade process"
+      echo "- Allow to add --no_auto_exec to install_plugin to make sure it will not execute the command each time you log into bash. You will have to call"
+      echo "the command manually if you want to execute it."
       echo
 }
 
