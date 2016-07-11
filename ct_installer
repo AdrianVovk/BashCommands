@@ -1,5 +1,5 @@
 #!/bin/bash
-install() {
+install_ct() {
         read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.bash_aliases https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool
