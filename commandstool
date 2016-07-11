@@ -141,14 +141,14 @@ update_commands_tool() {
 }
 
 update_commands_tool_custom_patch() {
-        #Code for patches
-        echo "Patching current install"
-        source $1
-        
-        # Actually replace the file
+        # Replace the file
         echo "Downloading new version"
         rm $COMMANDS_TOOL_FILE >> ~/.commandstool/installed_plugins &> /dev/null
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
+        
+        #Code for patches
+        echo "Making sure data is transferred"
+        source $1
         
         # Notify the system of the change
         update_bash    
