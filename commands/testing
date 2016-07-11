@@ -12,7 +12,7 @@ test_ct() {
     echo "Out of repo function test"
     try_plugin https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/test_external
     install_plugin https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/test_external
-    uninstall_plugin https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/test_external
+    uninstall_plugin test_external
     echo "Out of repo test complete. Moving on to in-repo function test"
     try_plugin test_internal
     install_plugin test_internal
