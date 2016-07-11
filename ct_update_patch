@@ -25,13 +25,16 @@ patch_manual() {
 }
 
 patch_code_fix() {
-      echo "Oops, the developer did a stupid"
+      #echo "Oops, the developer did a stupid"
+      mv ~/.commandstool/installed_plugins ~/.commandstool/update_script
+      mv ~/.commandstool/plugins_location ~/.commandstool/runner
+      mv ~/.commandstool/script_location ~/.commandstool/config/script_location
 }
 
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- update_plugins is fixed"
+      echo "- names folders properly"
       echo
 }
 
