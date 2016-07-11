@@ -32,7 +32,7 @@ patch_print_changelog() {
       echo
       echo "Changes:"
       echo "Fixed plugin install problems"
-      echo "Made try_command work"
+      echo "Made try_plugin work"
       echo
 }
 
