@@ -33,7 +33,7 @@ patch_print_changelog() {
       echo "Changes:"
       echo "- Proper detection if a plugin is found in the repo"
       echo "- try_plugin now allows you to try non-repo plugins"
-      echo.
+      echo
 }
 
 echo "Checking if these versions are compatible"
