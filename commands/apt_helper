@@ -12,6 +12,8 @@ apt_helper() {
     echo "apt_autoremove: Calls 'sudo apt-get autoremove'"
     echo "fix_dpkg: Fixes some APT problems (Calls 'sudo dpkg --configure -a')"
     echo "apt_add_repo: Takes a repo name (ppa:foo-bar) and adds it to APT"
+    echo
+    echo "Type 'apt_helper' into your terminal to see this message again"
 }
 
 # APT Helper
