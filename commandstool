@@ -73,7 +73,7 @@ install_plugin() {
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.commandstool/plugins/$1 $URL &> /dev/null
                 echo "rm $HOME/.commandstool/plugins/$1" >> ~/.commandstool/installed_plugins
-                chmod +rx $1
+                chmod +rx ~/.commandstool/plugins/$1
                 echo "source $HOME/.commandstool/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
@@ -83,25 +83,22 @@ install_plugin() {
 }
 
 try_plugin() {
-        read -n1 -p "Are you sure you want to install $1? [y/n]:" call_safetey && echo
+        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
+        if curl --output /dev/null --silent --head --fail "$REPO"; then
+                read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
+                URL=$REPO
+        else 
+                read -n1 -p "$1 was not found in the repo. Install it? [y/n]:" call_safetey && echo
+                URL=$1
+        fi
         if [ "$call_safetey" = "y" ]; then
-        mkdir ~/.commandstool/tmp &> /dev/null
-                cd ~/.commandstool/tmp
-                REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
-                if curl --output /dev/null --silent --head --fail "$REPO"
-                then
-                    echo "Command found in repo. Attempting to run"
-                    wget -O script_exec $REPO &> /dev/null
-                else
-                    echo "Command not found in repo. Attempting to fetch manually"
-                    wget -O script_exec $1 &> /dev/null
-                fi
-                chmod +x script_exec
-                source script_exec
+                mkdir ~/.commandstool/tmp &> /dev/null
+                wget -O ~/.commandstool/tmp/script_exec $REPO &> /dev/null
+                chmod +x ~/.commandstool/tmp/script_exec
+                source ~/.commandstool/tmp/script_exec
                 rm -rf ~/.commandstool/tmp
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
                 echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
-                cd ~
         else
                 echo Abort
         fi
