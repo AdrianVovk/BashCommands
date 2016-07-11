@@ -66,15 +66,18 @@ install_plugin() {
         if curl --output /dev/null --silent --head --fail "$REPO"; then
                 read -n1 -p "$1 was found in the repo. Install it? [y/n]:" call_safetey && echo        
                 URL=$REPO
+                FILENAME=$1
         else 
                 read -n1 -p "$1 was not found in the repo. Install it? [y/n]:" call_safetey && echo
                 URL=$1
+                URL_TEMP=$1:7
+                FILENAME=${URL_TEMP##/*/}
         fi
         if [ "$call_safetey" = "y" ]; then
-                wget -O ~/.commandstool/plugins/$1 $URL &> /dev/null
-                echo "rm $HOME/.commandstool/plugins/$1" >> ~/.commandstool/installed_plugins
-                chmod +rx ~/.commandstool/plugins/$1
-                echo "source $HOME/.commandstool/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
+                wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
+                echo "rm $HOME/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
+                chmod +rx ~/.commandstool/plugins/$FILENAME
+                echo "source $HOME/.commandstool/plugins/$FILENAME" > $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
         else
@@ -105,13 +108,20 @@ try_plugin() {
 }
 
 uninstall_plugin() {
+        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/$1"
+        if curl --output /dev/null --silent --head --fail "$REPO"; then
+                FILENAME=$1
+        else 
+                URL_TEMP=$1:7
+                FILENAME=${URL_TEMP##/*/}
+        fi
         read -n1 -p "Are you sure you want to uninstall $1? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
                 echo Uninstalling
-                rm ~/.commandstool/plugins/$1
-                $HOME/.commandstool/plugins/$1
-                sed -n '/'$1'/!p' ~/.commandstool/installed_plugins >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed ~/.commandstool/installed_plugins
-                sed -n '/'$1'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed $INSTALLED_SCRIPTS_LOCATION
+                rm ~/.commandstool/plugins/$FILENAME
+                $HOME/.commandstool/plugins/$FILENAME
+                sed -n '/'$FILENAME'/!p' ~/.commandstool/installed_plugins >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed ~/.commandstool/installed_plugins
+                sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed $INSTALLED_SCRIPTS_LOCATION
         else
                 echo Abort
         fi
