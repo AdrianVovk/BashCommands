@@ -97,6 +97,8 @@ try_plugin() {
                 chmod +x ~/.commandstool/tmp/script_exec
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
                 echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
+                echo "Running script (putting buffer just in case the script outputs things when it is run and doesn't just add functions):"
+                echo
                 source ~/.commandstool/tmp/script_exec
                 echo
                 rm -rf ~/.commandstool/tmp
