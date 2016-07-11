@@ -95,10 +95,11 @@ try_plugin() {
                 mkdir ~/.commandstool/tmp &> /dev/null
                 wget -O ~/.commandstool/tmp/script_exec $URL &> /dev/null
                 chmod +x ~/.commandstool/tmp/script_exec
-                source ~/.commandstool/tmp/script_exec
-                rm -rf ~/.commandstool/tmp
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
                 echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
+                source ~/.commandstool/tmp/script_exec
+                echo
+                rm -rf ~/.commandstool/tmp
         else
                 echo Abort
         fi
