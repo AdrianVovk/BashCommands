@@ -1,4 +1,6 @@
 #!/bin/bash
+# This file is executed whenever updating the tool in order to properly handle data and settings transferring
+
 patch_all_good() {
       echo "These versions are fully intercompatible. Continuing..."
 }
