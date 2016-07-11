@@ -23,19 +23,21 @@
 # If this is the first run or things have not been configured yet, configure them
 mkdir ~/.commandstool &> /dev/null
 mkdir ~/.commandstool/plugins &> /dev/null
-if [ ! -f "$HOME/.commandstool/plugins_location" ]; then
-        touch ~/.commandstool/plugins_location
+mkdir ~/.commandstool/config &> /dev/null
+if [ ! -f "$HOME/.commandstool/runner" ]; then
+        touch ~/.commandstool/runner
 fi
-if [ ! -f "$HOME/.commandstool/script_location" ]; then
-        echo "$HOME/.bash_aliases" > ~/.commandstool/script_location
+if [ ! -f "$HOME/.commandstool/config/script_location" ]; then
+        echo "$HOME/.bash_aliases" > ~/.commandstool/config/script_location
 fi
-if [ ! -f "$HOME/.commandstool/installed_plugins" ]; then
-        touch ~/.commandstool/installed_plugins
+if [ ! -f "$HOME/.commandstool/update_script" ]; then
+        touch ~/.commandstool/update_script
 fi
 
 # Read configuration
-INSTALLED_SCRIPTS_LOCATION=~/.commandstool/plugins_location
-COMMANDS_TOOL_FILE=$(cat ~/.commandstool/script_location)
+INSTALLED_SCRIPTS_LOCATION=~/.commandstool/runner
+COMMANDS_TOOL_FILE=$(cat ~/.commandstool/config/script_location)
+UPDATE_SCRIPT=~/.commandstool/update_script
 
 # This goes through and loads in all of the new scripts
 source $INSTALLED_SCRIPTS_LOCATION
@@ -70,10 +72,10 @@ install_plugin() {
         fi
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
-                echo "echo \"Updating $FILENAME\"" >> ~/.commandstool/installed_plugins
-                echo "rm $HOME/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
-                echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> ~/.commandstool/installed_plugins
-                echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
+                echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
+                echo "rm $HOME/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
+                echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> $UPDATE_SCRIPT
+                echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
                 chmod +rx ~/.commandstool/plugins/$FILENAME
                 echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
@@ -125,7 +127,7 @@ uninstall_plugin() {
         read -n1 -p "Are you sure you want to uninstall $FILENAME? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
                 rm ~/.commandstool/plugins/$FILENAME
-                sed -n '/'$FILENAME'/!p' ~/.commandstool/installed_plugins >> ~/.commandstool/tmp_installed_p && mv ~/.commandstool/tmp_installed_p ~/.commandstool/installed_plugins
+                sed -n '/'$FILENAME'/!p' $UPDATE_SCRIPT >> ~/.commandstool/tmp_update_script && mv ~/.commandstool/tmp_update_script $UPDATE_SCRIPT
                 sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed_s && mv ~/.commandstool/tmp_installed_s $INSTALLED_SCRIPTS_LOCATION
         else
                 echo Abort
@@ -138,7 +140,7 @@ make_command() {
 }
 
 update_plugins() {
-        source ~/.commandstool/installed_plugins
+        source $UPDATE_SCRIPT
         if [ ! "$1" = "--no_ct_update" ]; then
                 echo "Updating Commands Tool"
                 update_commands_tool
@@ -158,8 +160,9 @@ update_commands_tool() {
 
 update_commands_tool_custom_patch() {
         # Replace the file
-        rm $COMMANDS_TOOL_FILE >> ~/.commandstool/installed_plugins &> /dev/null
+        rm $COMMANDS_TOOL_FILE &> /dev/null
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
+        chmod +rx $COMMAND_TOOL_FILE
         
         #Code for patches
         source $1
