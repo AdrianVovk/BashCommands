@@ -133,9 +133,19 @@ update_plugins() {
 # Configuration
 
 update_commands_tool() {
-        #TODO: Patch system
+        #Code for patches
+        echo "Patching current install"
+        mkdir ~/.commandsutil/tmp/ &> /dev/null
+        wget -O ~/.commandsutil/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
+        rm -rf ~/.commandsutil/tmp/ &> /dev/null
+        
+        # Actually replace the file
+        echo "Downloading new version"
         rm $COMMANDS_TOOL_FILE >> ~/.commandsutil/installed_plugins
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool
+        
+        # Notify the system of the change
+        update_bash
 }
 
 commands_tool_uninstall() {
