@@ -13,7 +13,7 @@ patch_manual() {
       MANUALURL="www.google.com"
       
       echo "Uh-oh, it looks like these versions are not intercompatible at all."
-      echo "You will have to manually
+      echo "You will have to follow these instruction in order to manually transfer install files."
       read -n1 -s -p "Press any key to dowload instructions..." key && echo
       mkdir ~/.commandsutil/tmp/ &> /dev/null
       wget -O ~/.commandsutil/tmp/patch_instruction $MANUALURL &> /dev/null 
