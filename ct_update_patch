@@ -31,8 +31,8 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- uninstall_plugin support with non-repo plugins"
-      echo "- try_plugin: Change output order"
+      echo "- try_plugin: Improve output flow"
+      echo "- "
       echo
 }
 
