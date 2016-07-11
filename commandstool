@@ -116,7 +116,6 @@ uninstall_plugin() {
         fi
         read -n1 -p "Are you sure you want to uninstall $FILENAME? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
-                echo Uninstalling
                 rm ~/.commandstool/plugins/$FILENAME
                 sed -n '/'$FILENAME'/!p' ~/.commandstool/installed_plugins >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed ~/.commandstool/installed_plugins
                 sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed && mv ~/.commandstool/tmp_installed $INSTALLED_SCRIPTS_LOCATION
