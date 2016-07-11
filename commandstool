@@ -71,8 +71,8 @@ install_plugin() {
         else 
                 read -n1 -p "$1 was not found in the repo. Install it? [y/n]:" call_safetey && echo
                 URL=$1
-                URL_TEMP=$1:7
-                FILENAME=${URL_TEMP##/*/}
+                URL_TEMP=${1##*/}
+                FILENAME=${URL_TEMP##?*}
         fi
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
@@ -84,11 +84,6 @@ install_plugin() {
         else
                 echo Abort
         fi
-}
-
-shorten_url() {
-        URL_TEMP="$1":7
-        echo ${URL_TEMP##/*/}
 }
 
 try_plugin() {
@@ -120,8 +115,8 @@ uninstall_plugin() {
         then
                 FILENAME=$1
         else 
-                URL_TEMP=$1:7
-                FILENAME=${URL_TEMP##/*/}
+                URL_TEMP=${1##*/}
+                FILENAME=${URL_TEMP##?*}
         fi
         read -n1 -p "Are you sure you want to uninstall $1? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
