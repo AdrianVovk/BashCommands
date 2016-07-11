@@ -31,8 +31,8 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- Proper detection if a plugin is found in the repo"
-      echo "- try_plugin now allows you to try non-repo plugins"
+      echo "- uninstall_plugin support with non-repo plugins"
+      echo "- try_plugin: Change output order"
       echo
 }
 
