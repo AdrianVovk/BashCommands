@@ -31,8 +31,7 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "- Added Changelog function"
-      echo "- Fixed errors when patch is applied"
+      echo "Fixed many problems"
       echo
 }
 
