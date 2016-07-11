@@ -71,7 +71,7 @@ install_plugin() {
                 URL=$1
         fi
         if [ "$call_safetey" = "y" ]; then
-                wget -O $1 $URL &> /dev/null
+                wget -O ~/.commandstool/plugins/$1 $URL &> /dev/null
                 echo "rm $HOME/.commandstool/plugins/$1" >> ~/.commandstool/installed_plugins
                 chmod +rx $1
                 echo "source $HOME/.commandstool/plugins/$1" > $INSTALLED_SCRIPTS_LOCATION
