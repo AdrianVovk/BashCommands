@@ -42,11 +42,7 @@ UPDATE_SCRIPT=~/.commandstool/update_script
 # This goes through and loads in all of the new scripts
 source $INSTALLED_SCRIPTS_LOCATION
 
-# Add commands that should not be called automatically
-if [ -d ~/.commandstool/plugins_alt ]; then
-    PATH="$HOME/commandstool/plugins_alt:$PATH"    
-fi
-
+# Print a header message if this is the first run
 if [ ! -f ~/.commandstool/config/didrun ]; then
         echo "Yes" > ~/.commandstool/config/didrun
         echo "======================================================================"
