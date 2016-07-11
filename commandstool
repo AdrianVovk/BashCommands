@@ -134,7 +134,7 @@ update_plugins() {
 
 update_commands_tool() {
         #TODO: Patch system
-        rm $COMMANDS_TOOL_FILE" >> ~/.commandsutil/installed_plugins
+        rm $COMMANDS_TOOL_FILE >> ~/.commandsutil/installed_plugins
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool
 }
 
