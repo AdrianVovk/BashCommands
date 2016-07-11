@@ -138,10 +138,11 @@ make_command() {
 }
 
 update_plugins() {
+        source ~/.commandstool/installed_plugins
         if [ ! "$1" = "--no_ct_update" ]; then
+                echo "Updating Commands Tool"
                 update_commands_tool
         fi
-        source ~/.commandstool/installed_plugins
         update_bash
 }
 
@@ -157,7 +158,6 @@ update_commands_tool() {
 
 update_commands_tool_custom_patch() {
         # Replace the file
-        echo "Downloading new version"
         rm $COMMANDS_TOOL_FILE >> ~/.commandstool/installed_plugins &> /dev/null
         wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
         
