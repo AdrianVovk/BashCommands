@@ -70,12 +70,12 @@ install_plugin() {
         fi
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
-                echo "echo \"Updating $FILENAME\"""
+                echo "echo \"Updating $FILENAME\""" >> ~/.commandstool/installed_plugins
                 echo "rm $HOME/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
                 echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> ~/.commandstool/installed_plugins
                 echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
                 chmod +rx ~/.commandstool/plugins/$FILENAME
-                echo "source $HOME/.commandstool/plugins/$FILENAME" > $INSTALLED_SCRIPTS_LOCATION
+                echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION
                 source $INSTALLED_SCRIPTS_LOCATION
                 
                 # Try to run the plugin's splash if it has one
