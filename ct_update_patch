@@ -37,7 +37,7 @@ patch_print_changelog() {
 }
 
 echo "Checking if these versions are compatable"
-patch_all_good
-#patch_fixing
+#patch_all_good
+patch_fixing
 #patch_code_fix
 patch_print_changelog
