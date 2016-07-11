@@ -65,7 +65,7 @@ install_plugin() {
                 FILENAME=$1
         else 
                 FILENAME=${1##*/}
-                read -n1 -p "$FILE is from an external source. Install it? [y/n]:" call_safetey && echo
+                read -n1 -p "$FILENAME is from an external source. Install it? [y/n]:" call_safetey && echo
                 URL=$1
         fi
         if [ "$call_safetey" = "y" ]; then
