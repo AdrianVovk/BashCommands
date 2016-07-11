@@ -31,8 +31,9 @@ patch_code_fix() {
 patch_print_changelog() {
       echo
       echo "Changes:"
-      echo "Made external plugins work"
-      echo
+      echo "- Proper detection if a plugin is found in the repo"
+      echo "- try_plugin now allows you to try non-repo plugins"
+      echo.
 }
 
 echo "Checking if these versions are compatible"
