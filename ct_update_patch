@@ -29,7 +29,15 @@ patch_code_fix() {
       mv ~/.commandsutil ~/.commandstool
 }
 
+patch_print_changelog() {
+      echo
+      echo "Changes:"
+      echo "- Added Changelog function"
+      echo "- Fixed errors when patch is applied"
+}
+
 echo "Checking if these versions are compatible"
-#patch_all_good
-patch_fixing
+patch_all_good
+#patch_fixing
 #patch_code_fix
+patch_print_changelog
