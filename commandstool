@@ -70,6 +70,7 @@ install_plugin() {
         fi
         if [ "$call_safetey" = "y" ]; then
                 wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
+                echo "echo \"Updating $FILENAME\"""
                 echo "rm $HOME/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
                 echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> ~/.commandstool/installed_plugins
                 echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> ~/.commandstool/installed_plugins
