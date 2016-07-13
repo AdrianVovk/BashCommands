@@ -161,6 +161,7 @@ case $CT_COMMAND in
                 mkdir ~/.commandstool/plugins &> /dev/null
                 mkdir ~/.commandstool/plugins_storage &> /dev/null
                 mkdir ~/.commandstool/config &> /dev/null
+                rm -rf ~/.commandstool/tmp # Delete the temp folder. This will delete any commands downloaded to try
                 if [ ! -f "$HOME/.commandstool/runner" ]; then
                         touch ~/.commandstool/runner
                 fi
@@ -216,19 +217,23 @@ install_plugin() {
         COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
         if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
                 read -n1 -p "$1 is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
-                URL=$REPO
+                URL=$PACK_REPO
                 FILENAME=$1
                 TYPE="pack"
         else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
                 read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
-                URL=$REPO
+                URL=$COMMAND_REPO
                 FILENAME=$1
                 TYPE="command"
-        else 
+        else if curl --output /dev/null --silent --head --fail "$1"; then
                 FILENAME=${1##*/}
                 read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
                 URL=$1
                 TYPE="command"
+        else
+                echo "No such URL or command exists."
+                echo "Abort"
+                return
         fi
         if [ "$permission" = "y" ]; then
                 # If the user overrided anything, use it
@@ -255,27 +260,49 @@ install_plugin() {
 }
 
 try_plugin() {
-        REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
-        if curl --output /dev/null --silent --head --fail "$REPO"
-        then
-                read -n1 -p "$1 was found in the repo. Try it? [y/n]:" call_safetey && echo        
-                URL=$REPO
-        else 
+        PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
+        COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
+        if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
+                read -n1 -p "$1 is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
+                URL=$PACK_REPO
+                FILENAME=$1
+                TYPE="pack"
+        else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
+                read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
+                URL=$COMMAND_REPO
+                FILENAME=$1
+                TYPE="command"
+        else if curl --output /dev/null --silent --head --fail "$1"; then
                 FILENAME=${1##*/}
-                read -n1 -p "$FILENAME is from an external source. Try it? [y/n]:" call_safetey && echo
+                read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
                 URL=$1
+                TYPE="command"
+        else
+                echo "No such URL or command exists."
+                echo "Abort"
+                return
         fi
-        if [ "$call_safetey" = "y" ]; then
+        if [ "$permission" = "y" ]; then
+                # If the user overrided anything, use it
+                
+                
                 mkdir ~/.commandstool/tmp &> /dev/null
-                wget -O ~/.commandstool/tmp/script_exec $URL &> /dev/null
-                chmod +x ~/.commandstool/tmp/script_exec
+                wget -O ~/.commandstool/tmp/$FILENAME $URL &> /dev/null
+                chmod +x ~/.commandstool/tmp/$FILENAME
                 echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
                 echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
-                echo "Running script (putting buffer just in case the script outputs things when it is run and doesn't just add functions):"
-                echo
-                source ~/.commandstool/tmp/script_exec
-                echo
-                rm -rf ~/.commandstool/tmp
+                
+                # Execute the script as needed
+                if [ "$TYPE" = "pack" ]; then
+                        echo
+                        source ~/.commandstool/tmp/$FILENAME
+                        rm -rf ~/.commandstool/tmp/ # Delete the file now because we can.
+                        echo
+                else
+                        alias $FILENAME="source ~/.commandstool/tmp/$FILENAME"
+                        # Cleanup is done by init so we don't delete any files now.
+                fi
+                
         else
                 echo Abort
         fi
