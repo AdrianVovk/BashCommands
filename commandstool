@@ -34,8 +34,98 @@ fi
 shift
 case $CT_COMMAND in
         'try')
+                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
+                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
+                if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
+                        read -n1 -p "$1 is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
+                        URL=$PACK_REPO
+                        FILENAME=$1
+                        TYPE="pack"
+                else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
+                        read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
+                        URL=$COMMAND_REPO
+                        FILENAME=$1
+                        TYPE="command"
+                else if curl --output /dev/null --silent --head --fail "$1"; then
+                        FILENAME=${1##*/}
+                        read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
+                        URL=$1
+                        TYPE="command"
+                else
+                        echo "No such URL or command exists."
+                        echo "Abort"
+                        return
+                fi
+                if [ "$permission" = "y" ]; then
+                        # If the user overrided anything, use it
+                        
+                        
+                        mkdir ~/.commandstool/tmp &> /dev/null
+                        wget -O ~/.commandstool/tmp/$FILENAME $URL &> /dev/null
+                        chmod +x ~/.commandstool/tmp/$FILENAME
+                        echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
+                        echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
+                        
+                        # Execute the script as needed
+                        if [ "$TYPE" = "pack" ]; then
+                                echo
+                                source ~/.commandstool/tmp/$FILENAME
+                                rm -rf ~/.commandstool/tmp/ # Delete the file now because we can.
+                                echo
+                        else
+                                alias $FILENAME="source ~/.commandstool/tmp/$FILENAME"
+                                # Cleanup is done by init so we don't delete any files now.
+                        fi
+                        
+                else
+                        echo Abort
+                fi
                 ;;
         'install')
+                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
+                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
+                if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
+                        read -n1 -p "$1 is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
+                        URL=$PACK_REPO
+                        FILENAME=$1
+                        TYPE="pack"
+                else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
+                        read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
+                        URL=$COMMAND_REPO
+                        FILENAME=$1
+                        TYPE="command"
+                else if curl --output /dev/null --silent --head --fail "$1"; then
+                        FILENAME=${1##*/}
+                        read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
+                        URL=$1
+                        TYPE="command"
+                else
+                        echo "No such URL or command exists."
+                        echo "Abort"
+                        return
+                fi
+                if [ "$permission" = "y" ]; then
+                        # If the user overrided anything, use it
+                        
+                        
+                        wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
+                        echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
+                        echo "rm $HOME/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
+                        echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> $UPDATE_SCRIPT
+                        echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
+                        chmod +rx ~/.commandstool/plugins/$FILENAME
+                        
+                        if [ "$TYPE" = "pack" ]; then
+                                echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION # It is a CommandPack
+                                $FILENAME 2> /dev/null # Try to run the pack's splash if it has one
+                        else
+                                echo "alias $FILENAME='source $HOME/.commandstool/plugins/$FILENAME'" >> $INSTALLED_SCRIPTS_LOCATION # It is a command
+                        fi
+                        
+                        source $INSTALLED_SCRIPTS_LOCATION # Update the environment
+                else
+                        echo Abort
+                fi
                 ;;
         'uninstall')
                 if [ -f ~/.commandstool/plugins/$1 ]; then
@@ -211,102 +301,6 @@ case $CT_COMMAND in
                 commandstool commands
                 ;;
 esac
-
-install_plugin() {
-        PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
-        COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
-        if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
-                read -n1 -p "$1 is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
-                URL=$PACK_REPO
-                FILENAME=$1
-                TYPE="pack"
-        else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
-                read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
-                URL=$COMMAND_REPO
-                FILENAME=$1
-                TYPE="command"
-        else if curl --output /dev/null --silent --head --fail "$1"; then
-                FILENAME=${1##*/}
-                read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
-                URL=$1
-                TYPE="command"
-        else
-                echo "No such URL or command exists."
-                echo "Abort"
-                return
-        fi
-        if [ "$permission" = "y" ]; then
-                # If the user overrided anything, use it
-                
-                
-                if [ "$TYPE" = "pack" ]; then
-                        echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION # It is a CommandPack
-                else
-                        echo "alias $FILENAME='source $HOME/.commandstool/plugins/$FILENAME'" >> $INSTALLED_SCRIPTS_LOCATION # It is a command
-                fi
-                wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
-                echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
-                echo "rm $HOME/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
-                echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> $UPDATE_SCRIPT
-                echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
-                chmod +rx ~/.commandstool/plugins/$FILENAME
-                source $INSTALLED_SCRIPTS_LOCATION
-                
-                # Try to run the plugin's splash if it has one
-                $FILENAME 2> /dev/null
-        else
-                echo Abort
-        fi
-}
-
-try_plugin() {
-        PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
-        COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
-        if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
-                read -n1 -p "$1 is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
-                URL=$PACK_REPO
-                FILENAME=$1
-                TYPE="pack"
-        else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
-                read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
-                URL=$COMMAND_REPO
-                FILENAME=$1
-                TYPE="command"
-        else if curl --output /dev/null --silent --head --fail "$1"; then
-                FILENAME=${1##*/}
-                read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
-                URL=$1
-                TYPE="command"
-        else
-                echo "No such URL or command exists."
-                echo "Abort"
-                return
-        fi
-        if [ "$permission" = "y" ]; then
-                # If the user overrided anything, use it
-                
-                
-                mkdir ~/.commandstool/tmp &> /dev/null
-                wget -O ~/.commandstool/tmp/$FILENAME $URL &> /dev/null
-                chmod +x ~/.commandstool/tmp/$FILENAME
-                echo "There is a small chance the command failed to download. Please try to run the command to make sure it worked."
-                echo "The command will be removed from your computer the next time you log into bash. All of the functions of this command should work."
-                
-                # Execute the script as needed
-                if [ "$TYPE" = "pack" ]; then
-                        echo
-                        source ~/.commandstool/tmp/$FILENAME
-                        rm -rf ~/.commandstool/tmp/ # Delete the file now because we can.
-                        echo
-                else
-                        alias $FILENAME="source ~/.commandstool/tmp/$FILENAME"
-                        # Cleanup is done by init so we don't delete any files now.
-                fi
-                
-        else
-                echo Abort
-        fi
-}
 
 make_command() {
         echo "alias $1='$2'" >> $INSTALLED_SCRIPTS_LOCATION
