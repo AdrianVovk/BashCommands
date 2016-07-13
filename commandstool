@@ -20,58 +20,6 @@
 
 #=========================================================================================================================
 
-echo "REMINDER ADRIAN: MOVE THE INITIALIZATION TO SOME SORT OF OTHER SCRIPT CALLED EACH TIME YOU LOG INTO BASH"
-
-# If things have not been configured yet, configure them
-mkdir ~/.commandstool &> /dev/null
-mkdir ~/.commandstool/plugins &> /dev/null
-mkdir ~/.commandstool/plugins_storage &> /dev/null
-mkdir ~/.commandstool/config &> /dev/null
-if [ ! -f "$HOME/.commandstool/runner" ]; then
-        touch ~/.commandstool/runner
-fi
-if [ ! -f "$HOME/.commandstool/config/script_location" ]; then
-        echo "$HOME/.bash_aliases" > ~/.commandstool/config/script_location
-fi
-if [ ! -f "$HOME/.commandstool/update_script" ]; then
-        touch ~/.commandstool/update_script
-fi
-
-# Print a header message if this is the first run
-if [ ! -f ~/.commandstool/config/didrun ]; then
-        echo "Yes" > ~/.commandstool/config/didrun
-        echo "======================================================================"
-        echo "COMMANDS TOOL"
-        echo "Created by Adrian Vovk"
-        echo "======================================================================"
-        echo ""
-fi
-
-# This goes through and loads in all of the scripts properly
-source ~/.commandstool/runner
-
-# Used to call commandstool
-alias commandstool='source $(cat ~/.commandstool/config/script_location)'
-alias ct="commandstool"
-
-# Nano shortcut
-# Will remove appon request
-alias e='nano'
-
-# Bash
-alias edit_bashrc='nano ~/.bashrc && update_bash'
-alias update_bash='exec bash'
-
-# Allowing you to edit some of the things.
-alias edit_commands='nano $INSTALLED_SCRIPTS_LOCATION && update_bash'
-alias edit_update_script='nano $UPDATE_SCRIPT && update_bash'
-alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
-
-# Enable this when developing on a PC
-#alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
-
-#=====================================================================================================
-
 # Read configuration
 INSTALLED_SCRIPTS_LOCATION=~/.commandstool/runner
 COMMANDS_TOOL_FILE=$(cat ~/.commandstool/config/script_location)
@@ -90,10 +38,48 @@ case $CT_COMMAND in
         'install')
                 ;;
         'uninstall')
+                if [ -f ~/.commandstool/plugins/$1 ]; then
+                        FILENAME=$1
+                else 
+                        FILENAME=${1##*/}
+                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                                echo "Plugin not found. Abort"
+                                return
+                        fi
+                fi
+                read -n1 -p "Are you sure you want to uninstall $FILENAME? [y/n]:" permission && echo
+                if [ "$permission" = "y" ]; then
+                        rm ~/.commandstool/plugins/$FILENAME
+                        sed -n '/'$FILENAME'/!p' $UPDATE_SCRIPT >> ~/.commandstool/tmp_update_script && mv ~/.commandstool/tmp_update_script $UPDATE_SCRIPT
+                        sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed_s && mv ~/.commandstool/tmp_installed_s $INSTALLED_SCRIPTS_LOCATION
+                else
+                        echo Abort
+                fi
                 ;;
         'update')
+                source $UPDATE_SCRIPT
+                if [ ! "$1" = "-c" ]; then
+                        echo "Updating Commands Tool"
+                        commandstool update_ct
+                fi
+                update_bash
                 ;;
         'update_ct')
+                mkdir ~/.commandstool/tmp/ &> /dev/null
+                wget -O ~/.commandstool/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
+                update_commands_tool_custom_patch ~/.commandstool/tmp/patch
+                rm -rf ~/.commandstool/tmp/ &> /dev/null
+                update_bash
+                ;;
+        'patch_ct')
+                # Replace the file
+                rm $COMMANDS_TOOL_FILE &> /dev/null
+                wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
+                chmod +rx $COMMANDS_TOOL_FILE
+                
+                source $1 #Code for patches
+                
+                # Manually notify bash
                 ;;
         'reset')
                 read -n1 -p "Are you sure you want to do this? [y/n]:" permission && echo
@@ -101,6 +87,8 @@ case $CT_COMMAND in
                         mv $COMMANDS_TOOL_FILE ~/.ct_baskup # Just in case commandstool was installed inside of ~/.commandstool (Which might even be the default eventually)
                         rm -rf ~/.commandstool # Delete the install folder.
                         mv ~/.ct_backup $COMMANDS_TOOL_FILE # Move the backup back
+                        source $COMMANDS_TOOL_FILE init_ct
+                        echo "$COMMANDS_TOOL_FILE" > ~/.commandstool/config/script_location # After creating the proper direcories again, save the install location back into the config.
                         update_bash
                 else
                         echo Abort
@@ -109,6 +97,7 @@ case $CT_COMMAND in
         'uninstall_ct')
                 read -n1 -p "Are you sure you want to do this? [y/n]:" permission && echo
                 if [ "$permission" = "y" ]; then
+                        sed -n '/'$COMMANDS_TOOL_FILE'/!p' ~/.bashrc >> ~/.commandstool/tmp_bashrc && mv ~/.commandstool/tmp_bashrc $UPDATE_SCRIPT
                         rm $COMMANDS_TOOL_FILE
                         if [ ! "$1" = "-k" ]; then
                                 rm -rf ~/.commandstool
@@ -152,7 +141,7 @@ case $CT_COMMAND in
                 echo "- uninstall: Uninstalls the provided command or CommandPack"
                 echo "        Usage: 'commandstool uninstall PLUGIN'"
                 echo "- update: Update all of the installed commands and CommandPacks"
-                echo "        Usage: 'commandstool update -c"
+                echo "        Usage: 'commandstool update [-c]"
                 echo "        -c: Do not update CommandsTool while updating all of the plugins"
                 echo "- update_ct: Allowing you to update CommandsTool without touching installed scripts"
                 echo "- uninstall_ct: Uninstall CommandsTool from your system. If you installed using the installer script that will be kept."
@@ -165,6 +154,55 @@ case $CT_COMMAND in
                 echo "List of preinstalled Commands:"
                 echo "- e: Shorthand for 'nano'"
                 echo "- ct: Shorthand for 'commandstool'"
+                ;;
+        init_ct)
+                # If things have not been configured yet, configure them
+                mkdir ~/.commandstool &> /dev/null
+                mkdir ~/.commandstool/plugins &> /dev/null
+                mkdir ~/.commandstool/plugins_storage &> /dev/null
+                mkdir ~/.commandstool/config &> /dev/null
+                if [ ! -f "$HOME/.commandstool/runner" ]; then
+                        touch ~/.commandstool/runner
+                fi
+                if [ ! -f "$HOME/.commandstool/config/script_location" ]; then
+                        echo "$HOME/.bash_aliases" > ~/.commandstool/config/script_location
+                fi
+                if [ ! -f "$HOME/.commandstool/update_script" ]; then
+                        touch ~/.commandstool/update_script
+                fi
+                
+                # Print a header message if this is the first run
+                if [ ! -f ~/.commandstool/config/didrun ]; then
+                        echo "Yes" > ~/.commandstool/config/didrun
+                        echo "======================================================================"
+                        echo "COMMANDS TOOL"
+                        echo "Created by Adrian Vovk"
+                        echo "======================================================================"
+                        echo ""
+                fi
+                
+                # This goes through and loads in all of the scripts properly
+                source ~/.commandstool/runner
+                
+                # Used to call commandstool
+                alias commandstool='source $(cat ~/.commandstool/config/script_location)'
+                alias ct="commandstool"
+                
+                # Nano shortcut
+                # Will remove appon request
+                alias e='nano'
+                
+                # Bash
+                alias edit_bashrc='nano ~/.bashrc && update_bash'
+                alias update_bash='exec bash'
+                
+                # Allowing you to edit some of the things.
+                alias edit_commands='nano $INSTALLED_SCRIPTS_LOCATION && update_bash'
+                alias edit_update_script='nano $UPDATE_SCRIPT && update_bash'
+                alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
+                
+                # Enable this when developing on a PC
+                #alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
                 ;;
         *)
                 echo "Invalid command"
@@ -232,85 +270,7 @@ try_plugin() {
         fi
 }
 
-uninstall_plugin() {
-        if [ -f ~/.commandstool/plugins/$1 ]; then
-                FILENAME=$1
-        else 
-                FILENAME=${1##*/}
-                if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
-                        echo "Plugin not found. Abort"
-                        return
-                fi
-        fi
-        read -n1 -p "Are you sure you want to uninstall $FILENAME? [y/n]:" call_safetey && echo
-        if [ "$call_safetey" = "y" ]; then
-                rm ~/.commandstool/plugins/$FILENAME
-                sed -n '/'$FILENAME'/!p' $UPDATE_SCRIPT >> ~/.commandstool/tmp_update_script && mv ~/.commandstool/tmp_update_script $UPDATE_SCRIPT
-                sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed_s && mv ~/.commandstool/tmp_installed_s $INSTALLED_SCRIPTS_LOCATION
-        else
-                echo Abort
-        fi
-}
-
 make_command() {
         echo "alias $1='$2'" >> $INSTALLED_SCRIPTS_LOCATION
-        update_bash
-}
-
-update_plugins() {
-        source $UPDATE_SCRIPT
-        if [ ! "$1" = "--no_ct_update" ]; then
-                echo "Updating Commands Tool"
-                update_commands_tool
-        fi
-        update_bash
-}
-
-# Configuration
-
-update_commands_tool() {
-        mkdir ~/.commandstool/tmp/ &> /dev/null
-        wget -O ~/.commandstool/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
-        update_commands_tool_custom_patch ~/.commandstool/tmp/patch
-        rm -rf ~/.commandstool/tmp/ &> /dev/null
-        update_bash
-}
-
-update_commands_tool_custom_patch() {
-        # Replace the file
-        rm $COMMANDS_TOOL_FILE &> /dev/null
-        wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
-        chmod +rx $COMMANDS_TOOL_FILE
-        
-        #Code for patches
-        source $1
-        
-        # Manually notify bash
-}
-
-commands_tool_uninstall() {
-        read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
-        if [ "$call_safetey" = "y" ]; then
-                rm $COMMANDS_TOOL_FILE
-                rm -rf ~/.commandstool
-                update_bash
-        else
-                echo Abort
-        fi
-}
-
-commands_tool_reset() {
-        read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
-        if [ "$call_safetey" = "y" ]; then
-                rm $COMMANDS_TOOL_FILE
-                rm -rf ~/.commandstool
-                update_bash
-        else
-                echo Abort
-        fi
-        rm -rf ~/.commandstool
-        if [ ! -z "$1" ]; then
-                echo $1 > ~/.commandstool/script_location
-        fi
         update_bash
 }
