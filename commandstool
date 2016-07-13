@@ -97,6 +97,17 @@ case $CT_COMMAND in
                 ;;
         'reset')
                 ;;
+        'uninstall_ct')
+                read -n1 -p "Are you sure you want to do this? [y/n]:" permission && echo
+                if [ "$permission" = "y" ]; then
+                        
+                        rm $COMMANDS_TOOL_FILE
+                        rm -rf ~/.commandstool
+                        update_bash
+                else
+                        echo Abort
+                fi
+                ;;
         'test_install')
                 echo "Commands Tool was successfully installed."
                 ;;
@@ -113,22 +124,31 @@ case $CT_COMMAND in
                 echo "======================================================================"
                 echo
                 echo "CommandsTool: A script that can be used to install other scripts onto your system."
+                echo "Definitions:"
+                echo "- Command: A script that CommandsTool allows you to execute as a command (example: 'memtest test -a')"
+                echo "- CommandPack: A plugin designed for CommandsTool that will add a set of commands into your environment"
                 echo "Version: 1.0"
                 ;;
         'commands')
                 echo "List of possible commands:"
                 echo "- try: Allows you to try out commands without installing them"
-                echo "- install"
-                echo "- "
-                echo "- "
-                echo "- "
-                echo "- "
+                echo "- install: Installs the provided script or CommandPack"
+                echo "- uninstall: Uninstalls the provided command or CommandPack"
+                echo "- update: Update all of the installed commands and CommandPacks"
+                echo "- update_ct: Allowing you to update CommandsTool without touching installed scripts"
+                echo "- uninstall_ct: Uninstall CommandsTool from your system. If you installed using the installer script that will be kept."
+                echo "- reset: Resets CommandsTool removing all installed scripts"
                 echo "- help: Gives you all of the possible commands along with what CommandsTool can do."
                 echo "- about: Explains what CommandsTool can do"
                 echo "- commands: Show the list of commands that can be used"
+                echo
+                echo "List of preinstalled Commands:"
+                echo "- e: Shorthand for 'nano'"
+                echo "- "
                 ;;
         *)
                 echo "Invalid command"
+                echo
                 commandstool commands
                 ;;
 esac
@@ -260,6 +280,14 @@ commands_tool_uninstall() {
 }
 
 commands_tool_reset() {
+        read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
+        if [ "$call_safetey" = "y" ]; then
+                rm $COMMANDS_TOOL_FILE
+                rm -rf ~/.commandstool
+                update_bash
+        else
+                echo Abort
+        fi
         rm -rf ~/.commandstool
         if [ ! -z "$1" ]; then
                 echo $1 > ~/.commandstool/script_location
