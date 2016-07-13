@@ -20,9 +20,12 @@
 
 #=========================================================================================================================
 
-# If this is the first run or things have not been configured yet, configure them
+echo "REMINDER ADRIAN: MOVE THE INITIALIZATION TO SOME SORT OF OTHER SCRIPT CALLED EACH TIME YOU LOG INTO BASH"
+
+# If things have not been configured yet, configure them
 mkdir ~/.commandstool &> /dev/null
 mkdir ~/.commandstool/plugins &> /dev/null
+mkdir ~/.commandstool/plugins_storage &> /dev/null
 mkdir ~/.commandstool/config &> /dev/null
 if [ ! -f "$HOME/.commandstool/runner" ]; then
         touch ~/.commandstool/runner
@@ -34,9 +37,6 @@ if [ ! -f "$HOME/.commandstool/update_script" ]; then
         touch ~/.commandstool/update_script
 fi
 
-# This goes through and loads in all of the new scripts
-source ~/.commandstool/runner
-
 # Print a header message if this is the first run
 if [ ! -f ~/.commandstool/config/didrun ]; then
         echo "Yes" > ~/.commandstool/config/didrun
@@ -47,15 +47,27 @@ if [ ! -f ~/.commandstool/config/didrun ]; then
         echo ""
 fi
 
+# This goes through and loads in all of the scripts properly
+source ~/.commandstool/runner
+
+# Used to call commandstool
 alias commandstool='source $(cat ~/.commandstool/config/script_location)'
 alias ct="commandstool"
+
+#=====================================================================================================
 
 # Read configuration
 INSTALLED_SCRIPTS_LOCATION=~/.commandstool/runner
 COMMANDS_TOOL_FILE=$(cat ~/.commandstool/config/script_location)
 UPDATE_SCRIPT=~/.commandstool/update_script
+PLUGINS_DATA_STORE=~/.commandstool/plugins_storage
 
-#=====================================================================================================
+CT_COMMAND=$1
+if [ -z CT_COMMAND ]; then
+        echo "Usage: 'commandstool command [options]'"
+        return
+fi
+shift
 
 # Nano shortcut
 # Will remove appon request
