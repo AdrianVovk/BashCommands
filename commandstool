@@ -54,6 +54,22 @@ source ~/.commandstool/runner
 alias commandstool='source $(cat ~/.commandstool/config/script_location)'
 alias ct="commandstool"
 
+# Nano shortcut
+# Will remove appon request
+alias e='nano'
+
+# Bash
+alias edit_bashrc='nano ~/.bashrc && update_bash'
+alias update_bash='exec bash'
+
+# Allowing you to edit some of the things.
+alias edit_commands='nano $INSTALLED_SCRIPTS_LOCATION && update_bash'
+alias edit_update_script='nano $UPDATE_SCRIPT && update_bash'
+alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
+
+# Enable this when developing on a PC
+#alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
+
 #=====================================================================================================
 
 # Read configuration
@@ -68,21 +84,39 @@ if [ -z CT_COMMAND ]; then
         return
 fi
 shift
-
-# Nano shortcut
-# Will remove appon request
-alias e='nano'
-
-# Bash
-alias edit_bashrc='nano ~/.bashrc && update_bash'
-alias update_bash='exec bash'
-
-# The main functions
-alias edit_commands='nano $INSTALLED_SCRIPTS_LOCATION && update_bash'
-alias edit_commands_tool='nano $COMMANDS_TOOL_FILE && update_bash'
-
-# Enable this when developing on a PC not on GitHub
-#alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
+case $CT_COMMAND in
+        'try')
+                ;;
+        'install')
+                ;;
+        'uninstall')
+                ;;
+        'update')
+                ;;
+        'update_ct')
+                ;;
+        'reset')
+                ;;
+        'ct_test')
+                ;;
+        'commands')
+                echo "List of possible commands:"
+                echo "- try: Allows you to try out commands without installing them"
+                echo "- "
+                echo "- "
+                echo "- "
+                echo "- "
+                echo "- "
+                echo "- "
+                echo "- commands"
+                ;;
+        'help')
+                ;;
+        *)
+                echo "Invalid command"
+                commandstool commands
+                ;;
+esac
 
 install_plugin() {
         REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
