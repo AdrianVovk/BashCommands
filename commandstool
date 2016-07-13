@@ -34,13 +34,8 @@ if [ ! -f "$HOME/.commandstool/update_script" ]; then
         touch ~/.commandstool/update_script
 fi
 
-# Read configuration
-INSTALLED_SCRIPTS_LOCATION=~/.commandstool/runner
-COMMANDS_TOOL_FILE=$(cat ~/.commandstool/config/script_location)
-UPDATE_SCRIPT=~/.commandstool/update_script
-
 # This goes through and loads in all of the new scripts
-source $INSTALLED_SCRIPTS_LOCATION
+source ~/.commandstool/runner
 
 # Print a header message if this is the first run
 if [ ! -f ~/.commandstool/config/didrun ]; then
@@ -51,6 +46,14 @@ if [ ! -f ~/.commandstool/config/didrun ]; then
         echo "======================================================================"
         echo ""
 fi
+
+alias commandstool='source $(cat ~/.commandstool/config/script_location)'
+alias ct="commandstool"
+
+# Read configuration
+INSTALLED_SCRIPTS_LOCATION=~/.commandstool/runner
+COMMANDS_TOOL_FILE=$(cat ~/.commandstool/config/script_location)
+UPDATE_SCRIPT=~/.commandstool/update_script
 
 #=====================================================================================================
 
@@ -77,7 +80,7 @@ install_plugin() {
                 FILENAME=$1
         else 
                 FILENAME=${1##*/}
-                read -n1 -p "$FILENAME is from an external source. Install it? [y/n]:" call_safetey && echo
+                read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" call_safetey && echo
                 URL=$1
         fi
         if [ "$call_safetey" = "y" ]; then
