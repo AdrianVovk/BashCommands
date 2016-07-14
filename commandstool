@@ -58,8 +58,44 @@ case $CT_COMMAND in
                 fi
                 if [ "$permission" = "y" ]; then
                         # If the user overrided anything, use it
-                        
-                        
+                        # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
+                        TYPE="command"
+                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                                COMMAND=$1
+                                FILENAME=$1
+                                shift
+                        else
+                                echo $USAGE
+                                return
+                        fi
+                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                                echo $USAGE
+                                return
+                        fi
+                        while [[ ${1:0:1} = '-' ]]; do
+                                N=1
+                                L=${#1}
+                                while [[ $N -lt $L ]]; do
+                                  case ${1:$N:1} in
+                                     'p')
+                                        TYPE="pack"
+                                        ;;
+                                     'n') if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
+                                                echo $USAGE
+                                                return
+                                         fi
+                                         FILENAME=$2
+                                         shift
+                                         ;;
+                                     *)
+                                        echo $USAGE
+                                        return
+                                        ;;
+                                  esac
+                                  N=$(($N+1))
+                                done
+                                shift
+                        done
                         mkdir ~/.commandstool/tmp &> /dev/null
                         wget -O ~/.commandstool/tmp/$FILENAME $URL &> /dev/null
                         chmod +x ~/.commandstool/tmp/$FILENAME
@@ -106,8 +142,44 @@ case $CT_COMMAND in
                 fi
                 if [ "$permission" = "y" ]; then
                         # If the user overrided anything, use it
-                        
-                        
+                        # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
+                        TYPE="command"
+                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                                COMMAND=$1
+                                FILENAME=$1
+                                shift
+                        else
+                                echo $USAGE
+                                return
+                        fi
+                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                                echo $USAGE
+                                return
+                        fi
+                        while [[ ${1:0:1} = '-' ]]; do
+                                N=1
+                                L=${#1}
+                                while [[ $N -lt $L ]]; do
+                                  case ${1:$N:1} in
+                                     'p')
+                                        TYPE="pack"
+                                        ;;
+                                     'n') if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
+                                                echo $USAGE
+                                                return
+                                         fi
+                                         FILENAME=$2
+                                         shift
+                                         ;;
+                                     *)
+                                        echo $USAGE
+                                        return
+                                        ;;
+                                  esac
+                                  N=$(($N+1))
+                                done
+                                shift
+                        done
                         wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
                         echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
                         echo "rm $HOME/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
@@ -264,8 +336,12 @@ case $CT_COMMAND in
                 
                 # Print a header message if this is the first run
                 if [ ! -f ~/.commandstool/config/didrun ]; then
-                        touch ~/.commandstool/config/didrun
-                        commandstool about
+                        echo "Yes" > ~/.commandstool/config/didrun
+                        echo "======================================================================"
+                        echo "COMMANDS TOOL"
+                        echo "Created by Adrian Vovk"
+                        echo "======================================================================"
+                        echo ""
                 fi
                 
                 # This goes through and loads in all of the scripts properly
@@ -297,3 +373,8 @@ case $CT_COMMAND in
                 commandstool commands
                 ;;
 esac
+
+make_command() {
+        echo "alias $1='$2'" >> $INSTALLED_SCRIPTS_LOCATION
+        update_bash
+}
