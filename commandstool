@@ -32,7 +32,7 @@ if [ -z CT_COMMAND ]; then
         return
 fi
 shift
-case $CT_COMMAND in
+#case $CT_COMMAND in
         'try')
                 PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
                 COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
