@@ -264,12 +264,8 @@ case $CT_COMMAND in
                 
                 # Print a header message if this is the first run
                 if [ ! -f ~/.commandstool/config/didrun ]; then
-                        echo "Yes" > ~/.commandstool/config/didrun
-                        echo "======================================================================"
-                        echo "COMMANDS TOOL"
-                        echo "Created by Adrian Vovk"
-                        echo "======================================================================"
-                        echo ""
+                        touch ~/.commandstool/config/didrun
+                        commandstool about
                 fi
                 
                 # This goes through and loads in all of the scripts properly
@@ -301,8 +297,3 @@ case $CT_COMMAND in
                 commandstool commands
                 ;;
 esac
-
-make_command() {
-        echo "alias $1='$2'" >> $INSTALLED_SCRIPTS_LOCATION
-        update_bash
-}
