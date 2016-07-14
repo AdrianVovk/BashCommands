@@ -272,11 +272,58 @@ case $CT_COMMAND in
         'test_install')
                 echo "Commands Tool was successfully installed."
                 ;;
-        'help')
-                commandstool about
-                echo
-                commandstool commands
-                echo
+        'man' | 'help')
+                if [ -n $1 ]; then
+                        commandstool man man
+                        return
+                fi
+                case $1 in
+                        'try')
+                                echo "- try: Allows you to try out commands without installing them"
+                                echo "        Usage: 'commandstool try PLUGIN [-n name] [-p]'"
+                                echo "        -n: Use the provided name instead of the automatically generated one. You will use this to call the command (if it is not a CommandPack. If it is, this does nothing)"
+                                echo "        -p: Treat this plugin as a CommandPack" 
+                                ;;
+                        'install')
+                                echo "- install: Installs the provided script or CommandPack"
+                                echo "        Usage: 'commandstool install PLUGIN [-n name] [-p]'"
+                                echo "        -n: Use the provided name instead of the automatically generated one. You will use this to call the command and reference it within commandstool"
+                                echo "        -p: Treat this plugin as a CommandPack" 
+                                ;;
+                        'uninstall')
+                                echo "- uninstall: Uninstalls the provided command or CommandPack"
+                                echo "        Usage: 'commandstool uninstall PLUGIN'" 
+                                ;;
+                        'update')
+                                echo "- update: Update all of the installed commands and CommandPacks"
+                                echo "        Usage: 'commandstool update [-c]"
+                                echo "        -c: Do not update CommandsTool while updating all of the plugins" 
+                                ;;
+                        'update_ct')
+                                echo "- update_ct: Allowing you to update CommandsTool without touching installed scripts" 
+                                ;;
+                        'uninstall_ct')
+                                echo "- uninstall_ct: Uninstall CommandsTool from your system. If you installed using the installer script that will be kept."
+                                echo "        -k: Keep installed plugins and data." 
+                                ;;
+                        'reset')
+                                echo "- reset: Resets CommandsTool removing all installed scripts" 
+                                ;;
+                        'man' | 'help')
+                                echo "- man (or help): Gives you what each command does and their usage." 
+                                echo "        Usage: 'commandstool man COMMAND'" 
+                                ;;
+                        'about')
+                                echo "- about: Explains what CommandsTool can do" 
+                                ;;
+                        'commands')
+                                echo "- commands: Show the list of commands that can be used" 
+                                ;;
+                        *)
+                                echo "No such command"
+                                commandstool man man
+                                echo 
+                esac
                 ;;
         'about')
                 echo "======================================================================"
@@ -292,26 +339,16 @@ case $CT_COMMAND in
                 ;;
         'commands')
                 echo "List of possible commands:"
-                echo "- try: Allows you to try out commands without installing them"
-                echo "        Usage: 'commandstool try PLUGIN [-n name] [-p]'"
-                echo "        -n: Use the provided name instead of the automatically generated one. You will use this to call the command (if it is not a CommandPack. If it is, this does nothing)"
-                echo "        -p: Treat this plugin as a CommandPack"
-                echo "- install: Installs the provided script or CommandPack"
-                echo "        Usage: 'commandstool install PLUGIN [-n name] [-p]'"
-                echo "        -n: Use the provided name instead of the automatically generated one. You will use this to call the command and reference it within commandstool"
-                echo "        -p: Treat this plugin as a CommandPack"
-                echo "- uninstall: Uninstalls the provided command or CommandPack"
-                echo "        Usage: 'commandstool uninstall PLUGIN'"
-                echo "- update: Update all of the installed commands and CommandPacks"
-                echo "        Usage: 'commandstool update [-c]"
-                echo "        -c: Do not update CommandsTool while updating all of the plugins"
-                echo "- update_ct: Allowing you to update CommandsTool without touching installed scripts"
-                echo "- uninstall_ct: Uninstall CommandsTool from your system. If you installed using the installer script that will be kept."
-                echo "        -k: Keep installed plugins and data."
-                echo "- reset: Resets CommandsTool removing all installed scripts"
-                echo "- help: Gives you all of the possible commands along with what CommandsTool can do."
-                echo "- about: Explains what CommandsTool can do"
-                echo "- commands: Show the list of commands that can be used"
+                commandstool man try
+                commandstool man install
+                commandstool man uninstall
+                commandstool man update
+                commandstool man update_ct
+                commandstool man uninstall_ct
+                commandstool man reset
+                commandstool man man
+                commandstool man about
+                commandstool man commands
                 echo
                 echo "List of preinstalled Commands:"
                 echo "- e: Shorthand for 'nano'"
@@ -336,12 +373,8 @@ case $CT_COMMAND in
                 
                 # Print a header message if this is the first run
                 if [ ! -f ~/.commandstool/config/didrun ]; then
-                        echo "Yes" > ~/.commandstool/config/didrun
-                        echo "======================================================================"
-                        echo "COMMANDS TOOL"
-                        echo "Created by Adrian Vovk"
-                        echo "======================================================================"
-                        echo ""
+                        touch ~/.commandstool/config/didrun
+                        commandstool about
                 fi
                 
                 # This goes through and loads in all of the scripts properly
@@ -374,7 +407,7 @@ case $CT_COMMAND in
                 ;;
 esac
 
-make_command() {
-        echo "alias $1='$2'" >> $INSTALLED_SCRIPTS_LOCATION
-        update_bash
-}
+#make_command() {
+#        echo "alias $1='$2'" >> $INSTALLED_SCRIPTS_LOCATION
+#        update_bash
+#}
