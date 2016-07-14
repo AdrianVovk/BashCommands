@@ -80,7 +80,8 @@ case $CT_COMMAND in
                                      'p')
                                         TYPE="pack"
                                         ;;
-                                     'n') if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
+                                     'n') 
+                                        if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
                                                 echo $USAGE
                                                 return
                                          fi
@@ -112,7 +113,6 @@ case $CT_COMMAND in
                                 alias $FILENAME="source ~/.commandstool/tmp/$FILENAME"
                                 # Cleanup is done by init so we don't delete any files now.
                         fi
-                        
                 else
                         echo Abort
                 fi
