@@ -34,31 +34,8 @@ fi
 shift
 case $CT_COMMAND in
         'try')
-                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
-                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
-                if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
-                        read -n1 -p "$1 is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
-                        URL=$PACK_REPO
-                        FILENAME=$1
-                        TYPE="pack"
-                elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
-                        read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
-                        URL=$COMMAND_REPO
-                        FILENAME=$1
-                        TYPE="command"
-                elif curl --output /dev/null --silent --head --fail "$1"; then
-                        FILENAME=${1##*/}
-                        read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
-                        URL=$1
-                        TYPE="command"
-                else
-                        echo "No such URL or command exists."
-                        echo "Abort"
-                        return
-                fi
-                                # If the user overrided anything, use it
+                # If the user overrided anything, use it
                 # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
-                TYPE="command"
                 if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
                         COMMAND=$1
                         FILENAME=$1
@@ -97,6 +74,46 @@ case $CT_COMMAND in
                         done
                         shift
                 done
+                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
+                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
+                if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
+                        URL=$PACK_REPO
+                        if [ -z $FILENAME ]; then
+                                FILENAME=$1
+                        fi
+                        read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
+                        if [ -z $TYPE ]; then
+                                TYPE="pack"
+                        fi
+                elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
+                        URL=$COMMAND_REPO
+                        if [ -z $FILENAME ]; then
+                                FILENAME=$1
+                        fi
+                        read -n1 -p "$FILENAME is a command and was found in the repo. Install it? [y/n]:" permission && echo
+                        if [ -z $TYPE ]; then
+                                TYPE="command"
+                        else 
+                                read -n1 -p "$FILENAME is a command (that will be installed as a CommandPack by your request) and was found in the repo. Install it? [y/n]:" permission && echo
+                        fi
+                elif curl --output /dev/null --silent --head --fail "$1"; then
+                        if [ -z $FILENAME ]; then
+                                FILENAME=${1##*/}
+                        fi
+                        FILENAME=${1##*/}
+                        read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
+                        URL=$1
+                        if [ -z $TYPE ]; then
+                                TYPE="command"
+                                echo "Installing as command"
+                        else
+                                echo "Installing as CommandPack"
+                        fi
+                else
+                        echo "No such URL or command exists."
+                        echo "Abort"
+                        return
+                fi
                 if [ "$permission" = "y" ]; then
                         mkdir ~/.commandstool/tmp &> /dev/null
                         wget -O ~/.commandstool/tmp/$FILENAME $URL &> /dev/null
