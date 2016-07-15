@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ -n $1 ]; then
+if [ -z $1 ]; then
         echo "Usage: 'ct_installer COMMAND'"
         echo "To install run 'ct_instaler install'"
         echo "To install to a custom location, run 'ct_installer install_to LOCATION'"
