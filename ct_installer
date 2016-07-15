@@ -33,4 +33,7 @@ case $1 in
                 chmod +rwx ct_installer
                 source ct_installer
                 ;;
+        *)
+                echo "Invalid command"
+                ;;
 esac
