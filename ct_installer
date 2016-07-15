@@ -6,20 +6,20 @@ if [ -z $1 ]; then
         echo "To update the installer call 'ct_installer update_installer'"
         return
 fi
-case $1 in
+COMMAND=$1
+shift
+case $COMMAND in
         'install')
-                mkdir ~/.commandstool &> /dev/null
-                source ct_installer install_to ~/.commandstool/ct
-                commandstool test_install
-                ;;
+                source ct_installer install_to ~/.commandstool/ct ;;
         'install_to')
                 read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
                 if [ "$call_safetey" = "y" ]; then
                         wget -O $1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool                                chmod +x $1
                         mkdir ~/.commandstool &> /dev/null
+                        mkdir ~/.commandstool/config &> /dev/null
                         echo $1 > ~/.commandstool/config/script_location
                         source $1 init_ct
-                        echo "source $1 init_ct" >> ~/.bashrc
+                        echo "source $1 init_ct # For CommandsTool" >> ~/.bashrc
                         update_bash
                         commandstool reset &> /dev/null # If commandstool was installed before, reset it.
                         commandstool test_install
