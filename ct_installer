@@ -15,7 +15,8 @@ case $COMMAND in
                 read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
                 if [ "$call_safetey" = "y" ]; then
                         sed -n '/'1495246'/!p' ~/.bashrc >> ~/.commandstool/tmp_bashrc && mv ~/.commandstool/tmp_bashrc ~/.bashrc
-                        wget -O $1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool                                chmod +x $1
+                        wget -O $1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool                                
+                        chmod +x $1
                         mkdir ~/.commandstool &> /dev/null
                         mkdir ~/.commandstool/config &> /dev/null
                         echo $1 > ~/.commandstool/config/script_location
