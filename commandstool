@@ -88,6 +88,10 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=$IN
                         fi
+                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                                echo "$FILENAME is already installed."
+                                return
+                        fi
                         if [ -z $TYPE ]; then
                                 TYPE="command"
                                 read -n1 -p "$FILENAME is a command and was found in the repo. Try it? [y/n]:" permission && echo
@@ -97,6 +101,14 @@ case $CT_COMMAND in
                 elif curl --output /dev/null --silent --head --fail "$IN"; then
                         if [ -z $FILENAME ]; then
                                 FILENAME=${IN##*/}
+                        fi
+                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                                echo "$FILENAME is already installed."
+                                return
+                        fi
+                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                                echo "$FILENAME is already installed."
+                                return
                         fi
                         read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Try it? [y/n]:" permission && echo
                         URL=$IN
@@ -246,6 +258,7 @@ case $CT_COMMAND in
                         rm ~/.commandstool/plugins/$FILENAME
                         sed -n '/'$FILENAME'/!p' $UPDATE_SCRIPT >> ~/.commandstool/tmp_update_script && mv ~/.commandstool/tmp_update_script $UPDATE_SCRIPT
                         sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed_s && mv ~/.commandstool/tmp_installed_s $INSTALLED_SCRIPTS_LOCATION
+                        update_bash
                 else
                         echo Abort
                 fi
@@ -278,8 +291,9 @@ case $CT_COMMAND in
         'reset')
                 read -n1 -p "Are you sure you want to do this? [y/n]:" permission && echo
                 if [ "$permission" = "y" ]; then
-                        mv $COMMANDS_TOOL_FILE ~/.ct_baskup # Just in case commandstool was installed inside of ~/.commandstool (Which might even be the default eventually)
+                        mv $COMMANDS_TOOL_FILE ~/.ct_backup # Just in case commandstool was installed inside of ~/.commandstool (Which might even be the default eventually)
                         rm -rf ~/.commandstool # Delete the install folder.
+                        mkdir -p `dirname $COMMANDS_TOOL_FILE` &> /dev/null
                         mv ~/.ct_backup $COMMANDS_TOOL_FILE # Move the backup back
                         source $COMMANDS_TOOL_FILE init_ct
                         echo "$COMMANDS_TOOL_FILE" > ~/.commandstool/config/script_location # After creating the proper direcories again, save the install location back into the config.
