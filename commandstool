@@ -273,7 +273,7 @@ case $CT_COMMAND in
                 echo "Commands Tool was successfully installed."
                 ;;
         'man' | 'help')
-                if [ -n $1 ]; then
+                if [ -z $1 ]; then
                         commandstool man man
                         return
                 fi
