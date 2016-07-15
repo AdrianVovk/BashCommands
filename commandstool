@@ -36,6 +36,7 @@ case $CT_COMMAND in
         'try')
                 # If the user overrided anything, use it
                 # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
+                FILENAME=
                 if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
                         IN=$1
                         shift
@@ -148,6 +149,7 @@ case $CT_COMMAND in
         'install')
                 # If the user overrided anything, use it
                 # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
+                FILENAME=
                 if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
                         IN=$1
                         shift
