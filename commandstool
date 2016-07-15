@@ -56,47 +56,48 @@ case $CT_COMMAND in
                         echo "Abort"
                         return
                 fi
-                if [ "$permission" = "y" ]; then
-                        # If the user overrided anything, use it
-                        # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
-                        TYPE="command"
-                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                                COMMAND=$1
-                                FILENAME=$1
-                                shift
-                        else
-                                commandstool man try
-                                return
-                        fi
-                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                                commandstool man try
-                                return
-                        fi
-                        while [[ ${1:0:1} = '-' ]]; do
-                                N=1
-                                L=${#1}
-                                while [[ $N -lt $L ]]; do
-                                  case ${1:$N:1} in
-                                     'p')
-                                        TYPE="pack"
-                                        ;;
-                                     'n') 
-                                        if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
-                                                commandstool man try
-                                                return
-                                         fi
-                                         FILENAME=$2
-                                         shift
-                                         ;;
-                                     *)
+                                # If the user overrided anything, use it
+                # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
+                TYPE="command"
+                if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                        COMMAND=$1
+                        FILENAME=$1
+                        shift
+                else
+                        commandstool man try
+                        return
+                fi
+                if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                        commandstool man try
+                        return
+                fi
+                while [[ ${1:0:1} = '-' ]]; do
+                        N=1
+                        L=${#1}
+                        while [[ $N -lt $L ]]; do
+                          case ${1:$N:1} in
+                             'p')
+                                TYPE="pack"
+                                echo "User overrided type. Trying as CommandPack"
+                                ;;
+                             'n') 
+                                if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
                                         commandstool man try
                                         return
-                                        ;;
-                                  esac
-                                  N=$(($N+1))
-                                done
-                                shift
+                                 fi
+                                 FILENAME=$2
+                                 shift
+                                 ;;
+                             *)
+                                commandstool man try
+                                return
+                                ;;
+                          esac
+                          N=$(($N+1))
                         done
+                        shift
+                done
+                if [ "$permission" = "y" ]; then
                         mkdir ~/.commandstool/tmp &> /dev/null
                         wget -O ~/.commandstool/tmp/$FILENAME $URL &> /dev/null
                         chmod +x ~/.commandstool/tmp/$FILENAME
@@ -140,47 +141,47 @@ case $CT_COMMAND in
                         echo "Abort"
                         return
                 fi
-                if [ "$permission" = "y" ]; then
-                        # If the user overrided anything, use it
-                        # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
-                        TYPE="command"
-                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                                COMMAND=$1
-                                FILENAME=$1
-                                shift
-                        else
-                                commandstool man install
-                                return
-                        fi
-                        if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                                commandstool man install
-                                return
-                        fi
-                        while [[ ${1:0:1} = '-' ]]; do
-                                N=1
-                                L=${#1}
-                                while [[ $N -lt $L ]]; do
-                                  case ${1:$N:1} in
-                                     'p')
-                                        TYPE="pack"
-                                        echo "User overrided type. Installing as CommandPack"
-                                        ;;
-                                     'n') if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
-                                                commandstool man install
-                                                return
-                                         fi
-                                         FILENAME=$2
-                                         shift
-                                         ;;
-                                     *)
+                # If the user overrided anything, use it
+                # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
+                TYPE="command"
+                if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                        COMMAND=$1
+                        FILENAME=$1
+                        shift
+                else
+                        commandstool man install
+                        return
+                fi
+                if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
+                        commandstool man install
+                        return
+                fi
+                while [[ ${1:0:1} = '-' ]]; do
+                        N=1
+                        L=${#1}
+                        while [[ $N -lt $L ]]; do
+                          case ${1:$N:1} in
+                             'p')
+                                TYPE="pack"
+                                echo "User overrided type. Installing as CommandPack"
+                                ;;
+                             'n') if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
                                         commandstool man install
                                         return
-                                        ;;
-                                  esac
-                                  N=$(($N+1))
-                                done
-                                shift
+                                 fi
+                                 FILENAME=$2
+                                 shift
+                                 ;;
+                             *)
+                                commandstool man install
+                                return
+                                ;;
+                          esac
+                          N=$(($N+1))
                         done
+                        shift
+                done
+                if [ "$permission" = "y" ]; then
                         wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null
                         echo "echo \"Updating $FILENAME\"" >> $UPDATE_SCRIPT
                         echo "rm $HOME/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
