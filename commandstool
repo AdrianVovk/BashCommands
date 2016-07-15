@@ -37,8 +37,7 @@ case $CT_COMMAND in
                 # If the user overrided anything, use it
                 # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
                 if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                        COMMAND=$1
-                        FILENAME=$1
+                        IN=$1
                         shift
                 else
                         commandstool man try
@@ -74,40 +73,39 @@ case $CT_COMMAND in
                         done
                         shift
                 done
-                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
-                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
+                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${IN##*/}"
+                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${IN##*/}"
                 if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
                         URL=$PACK_REPO
                         if [ -z $FILENAME ]; then
-                                FILENAME=$1
+                                FILENAME=$IN
                         fi
-                        read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
+                        read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Try it? [y/n]:" permission && echo
                         if [ -z $TYPE ]; then
                                 TYPE="pack"
                         fi
                 elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
                         URL=$COMMAND_REPO
                         if [ -z $FILENAME ]; then
-                                FILENAME=$1
+                                FILENAME=$IN
                         fi
-                        read -n1 -p "$FILENAME is a command and was found in the repo. Install it? [y/n]:" permission && echo
+                        read -n1 -p "$FILENAME is a command and was found in the repo. Try it? [y/n]:" permission && echo
                         if [ -z $TYPE ]; then
                                 TYPE="command"
                         else 
-                                read -n1 -p "$FILENAME is a command (that will be installed as a CommandPack by your request) and was found in the repo. Install it? [y/n]:" permission && echo
+                                read -n1 -p "$FILENAME is a command (that will be installed as a CommandPack by your request) and was found in the repo. Try it? [y/n]:" permission && echo
                         fi
-                elif curl --output /dev/null --silent --head --fail "$1"; then
+                elif curl --output /dev/null --silent --head --fail "$IN"; then
                         if [ -z $FILENAME ]; then
-                                FILENAME=${1##*/}
+                                FILENAME=${IN##*/}
                         fi
-                        FILENAME=${1##*/}
-                        read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
-                        URL=$1
+                        read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Try it? [y/n]:" permission && echo
+                        URL=$IN
                         if [ -z $TYPE ]; then
                                 TYPE="command"
-                                echo "Installing as command"
+                                echo "Trying as command"
                         else
-                                echo "Installing as CommandPack"
+                                echo "Trying as CommandPack"
                         fi
                 else
                         echo "No such URL or command exists."
@@ -139,15 +137,14 @@ case $CT_COMMAND in
                 # If the user overrided anything, use it
                 # Adapted from http://bsdpants.blogspot.com/2007/02/option-ize-your-shell-scripts.html
                 if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                        COMMAND=$1
-                        FILENAME=$1
+                        IN=$1
                         shift
                 else
-                        commandstool man try
+                        commandstool man install
                         return
                 fi
                 if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                        commandstool man try
+                        commandstool man install
                         return
                 fi
                 while [[ ${1:0:1} = '-' ]]; do
@@ -157,7 +154,6 @@ case $CT_COMMAND in
                           case ${1:$N:1} in
                              'p')
                                 TYPE="pack"
-                                echo "User overrided type. Trying as CommandPack"
                                 ;;
                              'n') 
                                 if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
@@ -176,12 +172,12 @@ case $CT_COMMAND in
                         done
                         shift
                 done
-                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
-                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
+                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${IN##*/}"
+                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${IN##*/}"
                 if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
                         URL=$PACK_REPO
                         if [ -z $FILENAME ]; then
-                                FILENAME=$1
+                                FILENAME=$IN
                         fi
                         read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
                         if [ -z $TYPE ]; then
@@ -190,7 +186,7 @@ case $CT_COMMAND in
                 elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
                         URL=$COMMAND_REPO
                         if [ -z $FILENAME ]; then
-                                FILENAME=$1
+                                FILENAME=$IN
                         fi
                         read -n1 -p "$FILENAME is a command and was found in the repo. Install it? [y/n]:" permission && echo
                         if [ -z $TYPE ]; then
@@ -198,13 +194,12 @@ case $CT_COMMAND in
                         else 
                                 read -n1 -p "$FILENAME is a command (that will be installed as a CommandPack by your request) and was found in the repo. Install it? [y/n]:" permission && echo
                         fi
-                elif curl --output /dev/null --silent --head --fail "$1"; then
+                elif curl --output /dev/null --silent --head --fail "$IN"; then
                         if [ -z $FILENAME ]; then
-                                FILENAME=${1##*/}
+                                FILENAME=${IN##*/}
                         fi
-                        FILENAME=${1##*/}
                         read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
-                        URL=$1
+                        URL=$IN
                         if [ -z $TYPE ]; then
                                 TYPE="command"
                                 echo "Installing as command"
