@@ -231,7 +231,7 @@ case $CT_COMMAND in
         'update_ct')
                 mkdir ~/.commandstool/tmp/ &> /dev/null
                 wget -O ~/.commandstool/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
-                update_commands_tool_custom_patch ~/.commandstool/tmp/patch
+                commandstool patch_ct ~/.commandstool/tmp/patch
                 rm -rf ~/.commandstool/tmp/ &> /dev/null
                 update_bash
                 ;;
