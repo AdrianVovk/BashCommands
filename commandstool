@@ -106,14 +106,6 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=${IN##*/}
                         fi
-                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
-                                echo "$FILENAME is already installed."
-                                return
-                        fi
-                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
-                                echo "$FILENAME is already installed."
-                                return
-                        fi
                         read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Try it? [y/n]:" permission && echo
                         URL=$IN
                         if [ ! $TYPE = "pack" ]; then
@@ -200,7 +192,7 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=$IN
                         fi
-                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                        if [ -f ~/.commandstool/plugins/$FILENAME ]; then
                                 echo "$FILENAME is already installed."
                                 return
                         fi
@@ -215,7 +207,7 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=$IN
                         fi
-                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                        if [ -f ~/.commandstool/plugins/$FILENAME ]; then
                                 echo "$FILENAME is already installed."
                                 return
                         fi
@@ -229,7 +221,7 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=${IN##*/}
                         fi
-                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                        if [ -f ~/.commandstool/plugins/$FILENAME ]; then
                                 echo "$FILENAME is already installed."
                                 return
                         fi
