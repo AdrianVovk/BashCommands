@@ -32,7 +32,7 @@ if [ -z CT_COMMAND ]; then
         return
 fi
 shift
-#case $CT_COMMAND in
+case $CT_COMMAND in
         'try')
                 PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${1##*/}"
                 COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${1##*/}"
@@ -41,12 +41,12 @@ shift
                         URL=$PACK_REPO
                         FILENAME=$1
                         TYPE="pack"
-                else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
+                elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
                         read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
                         URL=$COMMAND_REPO
                         FILENAME=$1
                         TYPE="command"
-                else if curl --output /dev/null --silent --head --fail "$1"; then
+                elif curl --output /dev/null --silent --head --fail "$1"; then
                         FILENAME=${1##*/}
                         read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
                         URL=$1
@@ -125,12 +125,12 @@ shift
                         URL=$PACK_REPO
                         FILENAME=$1
                         TYPE="pack"
-                else if curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
+                elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
                         read -n1 -p "$1 is a command and was found in the repo. Install it? [y/n]:" permission && echo
                         URL=$COMMAND_REPO
                         FILENAME=$1
                         TYPE="command"
-                else if curl --output /dev/null --silent --head --fail "$1"; then
+                elif curl --output /dev/null --silent --head --fail "$1"; then
                         FILENAME=${1##*/}
                         read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
                         URL=$1
