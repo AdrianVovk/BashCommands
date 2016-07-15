@@ -72,8 +72,8 @@ case $CT_COMMAND in
                         done
                         shift
                 done
-                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${IN##*/}"
-                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${IN##*/}"
+                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/CommandsTool/master/packs/${IN##*/}"
+                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/CommandsTool/master/commands/${IN##*/}"
                 if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
                         URL=$PACK_REPO
                         if [ -z $FILENAME ]; then
@@ -184,8 +184,8 @@ case $CT_COMMAND in
                         done
                         shift
                 done
-                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/packs/${IN##*/}"
-                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commands/${IN##*/}"
+                PACK_REPO="https://raw.githubusercontent.com/AdrianVovk/CommandsTool/master/packs/${IN##*/}"
+                COMMAND_REPO="https://raw.githubusercontent.com/AdrianVovk/CommandsTool/master/commands/${IN##*/}"
                 if curl --output /dev/null --silent --head --fail "$PACK_REPO"; then
                         URL=$PACK_REPO
                         if [ -z $FILENAME ]; then
@@ -273,7 +273,7 @@ case $CT_COMMAND in
                 ;;
         'update_ct')
                 mkdir ~/.commandstool/tmp/ &> /dev/null
-                wget -O ~/.commandstool/tmp/patch https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_update_patch &> /dev/null
+                wget -O ~/.commandstool/tmp/patch https://raw.githubusercontent.com/AdrianVovk/CommandsTool/master/ct_update_patch &> /dev/null
                 commandstool patch_ct ~/.commandstool/tmp/patch
                 rm -rf ~/.commandstool/tmp/ &> /dev/null
                 update_bash
@@ -281,7 +281,7 @@ case $CT_COMMAND in
         'patch_ct')
                 # Replace the file
                 rm $COMMANDS_TOOL_FILE &> /dev/null
-                wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool &> /dev/null
+                wget -O $COMMANDS_TOOL_FILE https://raw.githubusercontent.com/AdrianVovk/CommandsTool/master/commandstool &> /dev/null
                 chmod +rx $COMMANDS_TOOL_FILE
                 
                 source $1 #Code for patches
