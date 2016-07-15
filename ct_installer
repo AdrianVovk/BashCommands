@@ -1,8 +1,33 @@
 #!/bin/bash
+if [ -n $1 ]; then
+        echo "Usage: 'ct_installer COMMAND"
+        echo "To install run 'ct_instaler install'"
+        echo "To install to a custom location, run 'ct_installer install_to LOCATION'"
+        echo "To update the installer call 'ct_installer update_installer'"
+        return
+fi
+case $1 in
+        'install')
+                mkdir ~/.commandstool &> /dev/null
+                source ct_installer install_to ~/.commandstool/ct
+                commandstool test_install
+                ;;
+        'install_to')
+                
+                ;;
+        'update_installer')
+                rm ct_installer
+                wget https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_installer
+                chmod +rwx ct_installer
+                source ct_installer
+                ;;
+esac
+
 install_ct() {
         read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
         if [ "$call_safetey" = "y" ]; then
-                wget -O ~/.bash_aliases https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool
+                mkdir ~/.commandstool &> /dev/null
+                wget -O ~/.commandstool/ct https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool
                 source ~/.bashrc
                 echo "Testing installation"
                 commands_tool_test
@@ -27,11 +52,4 @@ install_custom_location() {
         else
                 echo Abort Installation
         fi
-}
-
-update_installer() {
-        rm ct_installer
-        wget https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/ct_installer
-        chmod +rwx ct_installer
-        source ct_installer
 }
