@@ -65,11 +65,11 @@ case $CT_COMMAND in
                                 FILENAME=$1
                                 shift
                         else
-                                echo $USAGE
+                                commandstool man try
                                 return
                         fi
                         if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                                echo $USAGE
+                                commandstool man try
                                 return
                         fi
                         while [[ ${1:0:1} = '-' ]]; do
@@ -82,14 +82,14 @@ case $CT_COMMAND in
                                         ;;
                                      'n') 
                                         if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
-                                                echo $USAGE
+                                                commandstool man try
                                                 return
                                          fi
                                          FILENAME=$2
                                          shift
                                          ;;
                                      *)
-                                        echo $USAGE
+                                        commandstool man try
                                         return
                                         ;;
                                   esac
@@ -149,11 +149,11 @@ case $CT_COMMAND in
                                 FILENAME=$1
                                 shift
                         else
-                                echo $USAGE
+                                commandstool man install
                                 return
                         fi
                         if [[ ! ${1:0:1} = '-' ]] && [[ ! -z $1 ]]; then
-                                echo $USAGE
+                                commandstool man install
                                 return
                         fi
                         while [[ ${1:0:1} = '-' ]]; do
@@ -163,16 +163,17 @@ case $CT_COMMAND in
                                   case ${1:$N:1} in
                                      'p')
                                         TYPE="pack"
+                                        echo "User overrided type. Installing as CommandPack"
                                         ;;
                                      'n') if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
-                                                echo $USAGE
+                                                commandstool man install
                                                 return
                                          fi
                                          FILENAME=$2
                                          shift
                                          ;;
                                      *)
-                                        echo $USAGE
+                                        commandstool man install
                                         return
                                         ;;
                                   esac
