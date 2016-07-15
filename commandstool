@@ -92,7 +92,7 @@ case $CT_COMMAND in
                                 TYPE="command"
                                 read -n1 -p "$FILENAME is a command and was found in the repo. Try it? [y/n]:" permission && echo
                         else 
-                                read -n1 -p "$FILENAME is a command (that will be installed as a CommandPack by your request) and was found in the repo. Try it? [y/n]:" permission && echo
+                                read -n1 -p "$FILENAME is a command (that will be tried as a CommandPack by your request) and was found in the repo. Try it? [y/n]:" permission && echo
                         fi
                 elif curl --output /dev/null --silent --head --fail "$IN"; then
                         if [ -z $FILENAME ]; then
@@ -122,6 +122,7 @@ case $CT_COMMAND in
                         if [ "$TYPE" = "pack" ]; then
                                 echo
                                 source ~/.commandstool/tmp/$FILENAME
+                                $FILENAME 2> /dev/null # Try to run the pack's splash if it has one
                                 rm -rf ~/.commandstool/tmp/ # Delete the file now because we can.
                                 echo
                         else
