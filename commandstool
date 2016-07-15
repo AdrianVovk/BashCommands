@@ -57,6 +57,9 @@ case $CT_COMMAND in
                              'p')
                                 TYPE="pack"
                                 ;;
+                             'c')
+                                TYPE="command"
+                                ;;
                              'n') 
                                 if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
                                         commandstool man try
@@ -82,19 +85,18 @@ case $CT_COMMAND in
                                 FILENAME=$IN
                         fi
                         read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Try it? [y/n]:" permission && echo
-                        if [ -z $TYPE ]; then
+                        if [ ! $TYPE = "command" ]; then
                                 TYPE="pack"
+                                read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Try it? [y/n]:" permission && echo
+                        else 
+                                read -n1 -p "$FILENAME is a CommandPack (that will be installed as a command by your request) and was found in the repo. Try it? [y/n]:" permission && echo
                         fi
                 elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
                         URL=$COMMAND_REPO
                         if [ -z $FILENAME ]; then
                                 FILENAME=$IN
                         fi
-                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
-                                echo "$FILENAME is already installed."
-                                return
-                        fi
-                        if [ -z $TYPE ]; then
+                        if [ ! $TYPE = "pack" ]; then
                                 TYPE="command"
                                 read -n1 -p "$FILENAME is a command and was found in the repo. Try it? [y/n]:" permission && echo
                         else 
@@ -114,7 +116,7 @@ case $CT_COMMAND in
                         fi
                         read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Try it? [y/n]:" permission && echo
                         URL=$IN
-                        if [ -z $TYPE ]; then
+                        if [ ! $TYPE = "pack" ]; then
                                 TYPE="command"
                                 echo "Trying as command"
                         else
@@ -171,6 +173,9 @@ case $CT_COMMAND in
                              'p')
                                 TYPE="pack"
                                 ;;
+                             'c')
+                                TYPE="command"
+                                ;;
                              'n') 
                                 if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
                                         commandstool man try
@@ -195,16 +200,26 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=$IN
                         fi
-                        read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
-                        if [ -z $TYPE ]; then
+                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                                echo "$FILENAME is already installed."
+                                return
+                        fi
+                        if [ ! $TYPE = "command" ]; then
                                 TYPE="pack"
+                                read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
+                        else 
+                                read -n1 -p "$FILENAME is a CommandPack (that will be installed as a command by your request) and was found in the repo. Install it? [y/n]:" permission && echo
                         fi
                 elif curl --output /dev/null --silent --head --fail "$COMMAND_REPO"; then
                         URL=$COMMAND_REPO
                         if [ -z $FILENAME ]; then
                                 FILENAME=$IN
                         fi
-                        if [ -z $TYPE ]; then
+                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                                echo "$FILENAME is already installed."
+                                return
+                        fi
+                        if [ ! $TYPE = "pack" ]; then
                                 TYPE="command"
                                 read -n1 -p "$FILENAME is a command and was found in the repo. Install it? [y/n]:" permission && echo
                         else 
@@ -214,9 +229,13 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=${IN##*/}
                         fi
+                        if [ ! -f ~/.commandstool/plugins/$FILENAME ]; then
+                                echo "$FILENAME is already installed."
+                                return
+                        fi
                         read -n1 -p "$FILENAME may damage your computer. Make sure you know what this script does. Install it? [y/n]:" permission && echo
                         URL=$IN
-                        if [ -z $TYPE ]; then
+                        if [ ! $TYPE = "pack" ]; then
                                 TYPE="command"
                                 echo "Installing as command"
                         else
@@ -330,15 +349,17 @@ case $CT_COMMAND in
                 case $1 in
                         'try')
                                 echo "- try: Allows you to try out commands without installing them"
-                                echo "        Usage: 'commandstool try PLUGIN [-n name] [-p]'"
+                                echo "        Usage: 'commandstool try PLUGIN [-n name] [-p or -c]'"
                                 echo "        -n: Use the provided name instead of the automatically generated one. You will use this to call the command (if it is not a CommandPack. If it is, this does nothing)"
                                 echo "        -p: Treat this plugin as a CommandPack" 
+                                echo "        -c: Treat this plugin as a command"
                                 ;;
                         'install')
                                 echo "- install: Installs the provided script or CommandPack"
-                                echo "        Usage: 'commandstool install PLUGIN [-n name] [-p]'"
+                                echo "        Usage: 'commandstool install PLUGIN [-n name] [-p or -c]'"
                                 echo "        -n: Use the provided name instead of the automatically generated one. You will use this to call the command and reference it within commandstool"
                                 echo "        -p: Treat this plugin as a CommandPack" 
+                                echo "        -c: Treat this plugin as a command"
                                 ;;
                         'uninstall')
                                 echo "- uninstall: Uninstalls the provided command or CommandPack"
