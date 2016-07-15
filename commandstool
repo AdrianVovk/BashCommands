@@ -305,7 +305,7 @@ case $CT_COMMAND in
         'uninstall_ct')
                 read -n1 -p "Are you sure you want to do this? [y/n]:" permission && echo
                 if [ "$permission" = "y" ]; then
-                        sed -n '/'$COMMANDS_TOOL_FILE'/!p' ~/.bashrc >> ~/.commandstool/tmp_bashrc && mv ~/.commandstool/tmp_bashrc $UPDATE_SCRIPT
+                        sed -n '/'1495'/!p' ~/.bashrc >> ~/.commandstool/tmp_bashrc && mv ~/.commandstool/tmp_bashrc ~/.bashrc
                         rm $COMMANDS_TOOL_FILE
                         if [ ! "$1" = "-k" ]; then
                                 rm -rf ~/.commandstool
