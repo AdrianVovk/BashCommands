@@ -29,7 +29,7 @@ PLUGINS_DATA_STORE=~/.commandstool/plugins_storage
 CT_COMMAND=$1
 if [ -z $CT_COMMAND ]; then
         echo "Usage: 'commandstool command [options]'"
-        echo "Run 'commandstool commands' to see a list of cammands and how to use them"
+        echo "Run 'commandstool commands' to see a list of commands and how to use them"
         return
 fi
 shift
@@ -500,25 +500,12 @@ case $CT_COMMAND in
                 alias edit_bashrc='nano ~/.bashrc && update_bash'
                 alias update_bash='exec bash'
                 
-                # Allowing you to edit some of the things.
-                
-                'edit')
-                        
-                        ;;
-                'edit_ct')
-                        
-                        ;;
-                'edit_update_script')
-                        
-                        ;;
-                
                 # Enable this when developing on a PC
                 #alias backup="cp $COMMANDS_TOOL_FILE ~/.ctf_backup"
                 ;;
         *)
                 echo "Invalid command"
-                echo
-                commandstool commands
+                echo "Run 'commandstool commands' to see a list of commands and how to use them"
                 ;;
 esac
 
