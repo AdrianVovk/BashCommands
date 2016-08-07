@@ -85,9 +85,9 @@ case $CT_COMMAND in
                         if [ -z $FILENAME ]; then
                                 FILENAME=$IN
                         fi
-                        if [ $TYPE = "pack" ]; then
+                        if [ "$TYPE" = "pack" ]; then
                                 read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Try it? [y/n]:" permission && echo
-                        elif [ $TYPE = "command" ]; then
+                        elif [ "$TYPE" = "command" ]; then
                                 read -n1 -p "$FILENAME is a CommandPack (that will be installed as a command by your request) and was found in the repo. Try it? [y/n]:" permission && echo
                         else 
                                 TYPE="pack"
@@ -202,9 +202,9 @@ case $CT_COMMAND in
                                 echo "$FILENAME is already installed."
                                 return
                         fi
-                        if [ $TYPE = "pack" ]; then
+                        if [ "$TYPE" = "pack" ]; then
                                 read -n1 -p "$FILENAME is a CommandPack and was found in the repo. Install it? [y/n]:" permission && echo
-                        elif [ $TYPE = "command" ]; then
+                        elif [ "$TYPE" = "command" ]; then
                                 read -n1 -p "$FILENAME is a CommandPack (that will be installed as a command by your request) and was found in the repo. Install it? [y/n]:" permission && echo
                         else 
                                 TYPE="pack"
