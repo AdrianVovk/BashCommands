@@ -20,7 +20,7 @@ substance_dev_hook_update_script() {
 
 substance_dev_tools_smart_run() {
   FILE=${1##*/}  #This will be the command that will be installed
-  FOLDER=$PLUGINS_DATA_STORE/substance_dev/
+  FOLDER=$PLUGINS_DATA_STORE/substance_dev
   if [ -f $FOLDER/$FILE ]; then
     alias $FILE='source $FOLDER/$FILE'
     return
