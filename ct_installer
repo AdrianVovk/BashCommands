@@ -15,8 +15,9 @@ case $COMMAND in
                 read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
                 if [ "$call_safetey" = "y" ]; then
                         commandstool uninstall &> /dev/null # If commandstool was installed before, remove it.
-                        sed -n '/'1495246'/!p' ~/.bashrc >> ~/.commandstool/tmp_bashrc && mv ~/.commandstool/tmp_bashrc ~/.bashrc &> /dev/null
-                        wget -O $1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool                                
+                        sed -n '/'1495246'/!p' ~/.bashrc >> ~/.tmp_bashrc && mv ~/.tmp_bashrc ~/.bashrc &> /dev/null
+                        mkdir -p `dirname $1`
+                        wget -O $1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool                            
                         chmod +x $1
                         mkdir ~/.commandstool &> /dev/null
                         mkdir ~/.commandstool/config &> /dev/null
