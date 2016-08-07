@@ -14,7 +14,8 @@ case $COMMAND in
         'install_to')
                 read -n1 -p "Are you sure you want to do this? [y/n]:" call_safetey && echo
                 if [ "$call_safetey" = "y" ]; then
-                        sed -n '/'1495246'/!p' ~/.bashrc >> ~/.commandstool/tmp_bashrc && mv ~/.commandstool/tmp_bashrc ~/.bashrc
+                        commandstool uninstall &> /dev/null # If commandstool was installed before, remove it.
+                        sed -n '/'1495246'/!p' ~/.bashrc >> ~/.commandstool/tmp_bashrc && mv ~/.commandstool/tmp_bashrc ~/.bashrc &> /dev/null
                         wget -O $1 https://raw.githubusercontent.com/AdrianVovk/BashCommands/master/commandstool                                
                         chmod +x $1
                         mkdir ~/.commandstool &> /dev/null
@@ -22,8 +23,7 @@ case $COMMAND in
                         echo $1 > ~/.commandstool/config/script_location
                         source $1 init_ct
                         echo "source $1 init_ct \#1495246 CommandsTool" >> ~/.bashrc
-                        update_bash
-                        commandstool reset &> /dev/null # If commandstool was installed before, reset it.
+                        source ~/.bashrc
                         commandstool test_install
                 else
                         echo Abort Installation
