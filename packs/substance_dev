@@ -2,19 +2,32 @@
 substance_dev() {
   echo "Substance Development Tools"
   echo "Created by Adrian Vovk for Substance Mobile"
-  echo
-  echo "Installing Substance Developer tools."
-  substance_dev_commands_install_hooks #> /dev/null
-  echo "Complete!"
-  echo
   substance_dev_commands
   echo "Run 'substance_dev_commands' to view the list of available commands"
+  echo
+  echo "Installing Substance Developer tools."
+  echo "Modding Updater Script"
+  substance_dev_hook_update_script
 }
 
 substance_dev_commands() {
   echo "Commands Coming Soon"
 }
 
-substance_dev_commands_install_hooks() {
-  echo "Location = $PLUGINS_DATA_STORE/substance_dev/"
+substance_dev_hook_update_script() {
+  echo "rm -rf $PLUGINS_DATA_STORE/substance_dev/" >> $UPDATE_SCRIPT
 }
+
+substance_dev_tools_smart_run() {
+  FILE=${1##*/}  #This will be the command that will be installed
+  FOLDER=$PLUGINS_DATA_STORE/substance_dev/
+  if [ -f $FOLDER/$FILE ]; then
+    source $FOLDER/$FILE
+    return
+  fi
+  wget -O $FOLDER/$FILE $1 &> /dev/null
+  chmod +rx $FOLDER/$FILE
+  
+}
+
+substance_dev_tools_smart_run 
