@@ -22,12 +22,12 @@ substance_dev_tools_smart_run() {
   FILE=${1##*/}  #This will be the command that will be installed
   FOLDER=$PLUGINS_DATA_STORE/substance_dev/
   if [ -f $FOLDER/$FILE ]; then
-    source $FOLDER/$FILE
+    alias $FILE='source $FOLDER/$FILE'
     return
   fi
   wget -O $FOLDER/$FILE $1 &> /dev/null
   chmod +rx $FOLDER/$FILE
-  
+  alias $FILE='source $FOLDER/$FILE'
 }
 
-substance_dev_tools_smart_run 
+substance_dev_tools_smart_run https://raw.githubusercontent.com/SubstanceMobile/DevTools/master/adbtool
