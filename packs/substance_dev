@@ -7,7 +7,7 @@ substance_dev() {
   substance_dev_commands_install_hooks > /dev/null
   echo "Complete!"
   echo
-  substance_dev_commands()
+  substance_dev_commands
   echo "Run 'substance_dev_commands' to view the list of available commands"
 }
 
