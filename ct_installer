@@ -24,8 +24,9 @@ case $COMMAND in
                         echo $1 > ~/.commandstool/config/script_location
                         source $1 init_ct
                         echo "source $1 init_ct \#1495246 CommandsTool" >> ~/.bashrc
-                        source ~/.bashrc
+                        source $1 init_ct
                         commandstool test_install
+                        update_bash
                 else
                         echo Abort Installation
                 fi
