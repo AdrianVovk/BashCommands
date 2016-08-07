@@ -176,14 +176,14 @@ case $CT_COMMAND in
                                 ;;
                              'n') 
                                 if [[ $N -ne $(($L-1)) || ! -n ${2} ]]; then
-                                        commandstool man try
+                                        commandstool man install
                                         return
                                  fi
                                  FILENAME=$2
                                  shift
                                  ;;
                              *)
-                                commandstool man try
+                                commandstool man install
                                 return
                                 ;;
                           esac
@@ -266,12 +266,12 @@ case $CT_COMMAND in
                         
                         if [ "$TYPE" = "pack" ]; then
                                 echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION # It is a CommandPack
+                                source $INSTALLED_SCRIPTS_LOCATION # Update the environment
                                 $FILENAME 2> /dev/null # Try to run the pack's splash if it has one
                         else
                                 echo "alias $FILENAME='source $HOME/.commandstool/plugins/$FILENAME'" >> $INSTALLED_SCRIPTS_LOCATION # It is a command
+                                source $INSTALLED_SCRIPTS_LOCATION # Update the environment
                         fi
-                        
-                        source $INSTALLED_SCRIPTS_LOCATION # Update the environment
                 else
                         echo Abort
                 fi
