@@ -263,6 +263,7 @@ case $CT_COMMAND in
                         echo "wget -O ~/.commandstool/plugins/$FILENAME $URL &> /dev/null" >> $UPDATE_SCRIPT
                         echo "chmod +rx ~/.commandstool/plugins/$FILENAME" >> $UPDATE_SCRIPT
                         chmod +rx ~/.commandstool/plugins/$FILENAME
+                        mkdir -p $PLUGINS_DATA_STORE/$FILENAME/
                         
                         if [ "$TYPE" = "pack" ]; then
                                 echo "source $HOME/.commandstool/plugins/$FILENAME" >> $INSTALLED_SCRIPTS_LOCATION # It is a CommandPack
@@ -289,6 +290,7 @@ case $CT_COMMAND in
                 read -n1 -p "Are you sure you want to uninstall $FILENAME? [y/n]:" permission && echo
                 if [ "$permission" = "y" ]; then
                         rm ~/.commandstool/plugins/$FILENAME
+                        rm -rf $PLUGINS_DATA_STORE/$FILENAME/
                         sed -n '/'$FILENAME'/!p' $UPDATE_SCRIPT >> ~/.commandstool/tmp_update_script && mv ~/.commandstool/tmp_update_script $UPDATE_SCRIPT
                         sed -n '/'$FILENAME'/!p' $INSTALLED_SCRIPTS_LOCATION >> ~/.commandstool/tmp_installed_s && mv ~/.commandstool/tmp_installed_s $INSTALLED_SCRIPTS_LOCATION
                         update_bash
